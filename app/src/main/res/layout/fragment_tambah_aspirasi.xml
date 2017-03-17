@@ -100,15 +100,22 @@
             android:text="Upload Foto KTP"
             android:textSize="11dp" />
 
-        <TextView
-            android:id="@+id/textView3"
+        <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Aspirasi yang anda kirim akan kami filter\nterlebih dahulu sebelum di publish\ndemi kenyamanan bersama"
-            android:textAlignment="textEnd"
-            android:layout_above="@+id/textView"
+            android:layout_marginLeft="4dp"
+            android:layout_alignTop="@+id/imageKTPAspirasi"
             android:layout_alignEnd="@+id/border"
-            android:layout_marginBottom="11dp" />
+            android:id="@+id/linearLayout">
+            <TextView
+                android:id="@+id/textView3"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:text="Aspirasi yang anda kirim akan kami filter\nterlebih dahulu sebelum di publish\ndemi kenyamanan bersama"
+                android:textAlignment="textEnd"
+                android:layout_marginBottom="11dp" />
+        </LinearLayout>
 
         <Button
             android:id="@+id/button2"
@@ -120,7 +127,7 @@
             android:background="#03A9F4"
             android:text="Kirim Aspirasi"
             android:textColor="@android:color/white"
-            android:layout_alignEnd="@+id/textView3" />
+            android:layout_alignEnd="@+id/linearLayout" />
 
     </RelativeLayout>
 

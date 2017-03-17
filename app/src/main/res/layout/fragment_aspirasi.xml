@@ -9,8 +9,6 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
-
-
         <android.support.design.widget.FloatingActionButton
             android:id="@+id/floatingActionButton"
             android:layout_width="wrap_content"
@@ -23,13 +21,42 @@
             app:fabSize="mini"
             app:srcCompat="@android:drawable/ic_menu_add" />
 
-        <ImageView
-            android:id="@+id/imageView5"
+        <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="145dp"
-            android:layout_alignParentStart="true"
-            android:layout_alignParentTop="true"
-            app:srcCompat="@drawable/side_nav_bar" />
+            android:id="@+id/relativ"
+            android:layout_height="145dp">
+            <ImageView
+                android:id="@+id/imageView5"
+                android:layout_width="match_parent"
+                android:layout_height="fill_parent"
+                android:layout_alignParentStart="true"
+                android:scaleType="fitXY"
+                app:srcCompat="@drawable/aspirasi" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Aspirasi Untuk Inspirasi,"
+                android:textColor="@android:color/white"
+                android:textSize="20dp"
+                android:textStyle="bold"
+                android:layout_marginStart="50dp"
+                android:layout_marginTop="46dp"
+                android:layout_alignParentTop="true"
+                android:layout_alignParentStart="true"
+                android:id="@+id/textView5" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Yuk ber-aspirasi !"
+                android:textColor="@android:color/white"
+                android:textSize="20dp"
+                android:textStyle="bold"
+                android:layout_marginTop="13dp"
+                android:layout_marginEnd="49dp"
+                android:layout_below="@+id/textView5"
+                android:layout_alignParentEnd="true" />
+        </RelativeLayout>
 
         <ListView
             android:layout_width="match_parent"
@@ -38,7 +65,7 @@
             android:divider="@null"
             android:dividerHeight="0dp"
             android:layout_alignParentStart="true"
-            android:layout_below="@+id/imageView5" />
+            android:layout_below="@+id/relativ" />
     </RelativeLayout>
 
 </FrameLayout>

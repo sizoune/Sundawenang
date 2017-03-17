@@ -8,8 +8,10 @@ import android.support.v4.app.FragmentTransaction;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 
 import com.example.pattimura.sundawenang.R;
+import com.squareup.picasso.Picasso;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -28,6 +30,9 @@ public class Aspirasi extends Fragment {
         // Inflate the layout for this fragment
         View v =  inflater.inflate(R.layout.fragment_aspirasi, container, false);
         FloatingActionButton fab = (FloatingActionButton) v.findViewById(R.id.floatingActionButton);
+        ImageView cover = (ImageView) v.findViewById(R.id.imageView5);
+
+        Picasso.with(Aspirasi.this.getContext()).load(R.drawable.aspirasi).fit().into(cover);
 
         fab.setOnClickListener(new View.OnClickListener() {
             @Override

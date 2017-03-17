@@ -1,13 +1,39 @@
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="com.example.pattimura.sundawenang.Fragment.Pengaduan">
 
     <!-- TODO: Update blank fragment layout -->
-    <TextView
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="Ini pengaduan" />
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:id="@+id/border"
+            android:layout_width="match_parent"
+            android:layout_height="200dp"
+            android:layout_margin="12dp"
+            android:background="@drawable/customborder">
+
+            <com.rengwuxian.materialedittext.MaterialEditText
+                android:id="@+id/txtisiAspirasi"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/spinner1"
+                android:layout_marginLeft="15dp"
+                android:layout_marginRight="15dp"
+                android:hint="Apa keluhan anda ?"
+                android:inputType="textMultiLine"
+                android:textSize="15dp"
+                app:met_baseColor="@android:color/black"
+                app:met_floatingLabel="normal"
+                app:met_floatingLabelTextColor="@android:color/black"
+                app:met_primaryColor="@android:color/black" />
+        </LinearLayout>
+
+    </RelativeLayout>
 
 </FrameLayout>

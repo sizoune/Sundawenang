@@ -98,7 +98,7 @@ public class LandingPage extends AppCompatActivity
             ft.replace(R.id.mainframe, fragment);
             ft.commit();
         } else if (id == R.id.nav_layanan) {
-            judul.setText("LAYANAN");
+            judul.setText("PELAYANAN");
             fragment = new Layanan();
             FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
             ft.replace(R.id.mainframe, fragment);

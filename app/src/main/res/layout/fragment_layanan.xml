@@ -1,13 +1,73 @@
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="com.example.pattimura.sundawenang.Fragment.Layanan">
 
     <!-- TODO: Update blank fragment layout -->
-    <TextView
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="Ini Layanan" />
+        android:layout_height="match_parent">
+
+
+        <TextView
+            android:id="@+id/textView2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_centerHorizontal="true"
+            android:layout_marginBottom="15dp"
+            android:layout_marginLeft="5dp"
+            android:layout_marginRight="5dp"
+            android:layout_marginTop="32dp"
+            android:text="Silahkan ajukan layanan yang dibutuhkan kepada administrasi
+desa. Harap cantumkan foto bukti pembayaran pajak dan KTP asli supaya kami dapat memproses pengajuan anda"
+            android:textAlignment="center"
+            android:textSize="13dp" />
+
+        <fr.ganfra.materialspinner.MaterialSpinner
+            android:id="@+id/spinner1"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/textView2"
+            android:layout_marginLeft="15dp"
+            android:layout_marginRight="15dp"
+            app:ms_arrowColor="#03A9F4"
+            app:ms_arrowSize="16dp"
+            app:ms_floatingLabelColor="@android:color/black"
+            app:ms_floatingLabelText="Layanan yang dipilih"
+            app:ms_hint="Jenis Layanan yang tersedia"
+            app:ms_multiline="true" />
+
+        <com.rengwuxian.materialedittext.MaterialEditText
+            android:id="@+id/txtNama"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/spinner1"
+            android:layout_marginLeft="15dp"
+            android:layout_marginRight="15dp"
+            android:hint="Nama"
+            android:inputType="textPersonName"
+            app:met_baseColor="@android:color/black"
+            app:met_floatingLabel="normal"
+            app:met_floatingLabelTextColor="@android:color/black"
+            app:met_primaryColor="@android:color/black" />
+
+        <com.rengwuxian.materialedittext.MaterialEditText
+            android:id="@+id/txtTelp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/txtNama"
+            android:layout_marginLeft="15dp"
+            android:layout_marginRight="15dp"
+            android:hint="No Telpon"
+            android:inputType="number"
+            app:met_baseColor="@android:color/black"
+            app:met_floatingLabel="normal"
+            app:met_floatingLabelTextColor="@android:color/black"
+            app:met_primaryColor="@android:color/black" />
+
+    </RelativeLayout>
 
 </FrameLayout>

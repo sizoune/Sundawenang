@@ -1,30 +1,37 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 
+    <group
+        android:id="@+id/menu"
+        android:checkableBehavior="single">
 
-    <item
-        android:id="@+id/nav_berita"
-        android:icon="@drawable/ic_menu_camera"
-        android:title="BERITA" />
-    <item
-        android:id="@+id/nav_lowongan"
-        android:icon="@drawable/ic_menu_gallery"
-        android:title="LOWONGAN" />
-    <item
-        android:id="@+id/nav_produk"
-        android:icon="@drawable/ic_menu_slideshow"
-        android:title="PRODUK" />
-    <item
-        android:id="@+id/nav_layanan"
-        android:icon="@drawable/ic_menu_manage"
-        android:title="LAYANAN" />
-    <item
-        android:id="@+id/nav_aspirasi"
-        android:icon="@drawable/ic_menu_manage"
-        android:title="ASPIRASI" />
-    <item
-        android:id="@+id/nav_pengaduan"
-        android:icon="@drawable/ic_menu_manage"
-        android:title="PENGADUAN" />
+        <item
+            android:id="@+id/nav_berita"
+            android:icon="@drawable/ic_menu_camera"
+            android:title="BERITA" />
+        <item
+            android:id="@+id/nav_lowongan"
+            android:icon="@drawable/ic_menu_gallery"
+            android:title="LOWONGAN" />
+        <item
+            android:id="@+id/nav_produk"
+            android:icon="@drawable/ic_menu_slideshow"
+            android:title="PRODUK" />
+        <item
+            android:id="@+id/nav_layanan"
+            android:icon="@drawable/ic_menu_manage"
+            android:title="LAYANAN" />
+        <item
+            android:id="@+id/nav_aspirasi"
+            android:icon="@drawable/ic_menu_manage"
+            android:title="ASPIRASI" />
+        <item
+            android:id="@+id/nav_pengaduan"
+            android:icon="@drawable/ic_menu_manage"
+            android:title="PENGADUAN" />
+
+
+    </group>
+
 
 </menu>

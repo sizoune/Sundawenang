@@ -21,6 +21,7 @@
         android:fitsSystemWindows="true"
         android:background="@color/navheadercolor"
         app:headerLayout="@layout/nav_header_landing_page"
+        app:itemTextColor="@color/warnaitem"
         app:menu="@menu/activity_landing_page_drawer" />
 
 </android.support.v4.widget.DrawerLayout>

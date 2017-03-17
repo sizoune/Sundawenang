@@ -5,4 +5,5 @@
     <color name="colorAccent">#FF4081</color>
     <color name="appbarcolor">#424242</color>
     <color name="navheadercolor">#C8E6C9</color>
+    <color name="warnaitem">#4CAF50</color>
 </resources>

@@ -6,14 +6,21 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ListView;
+import android.widget.Toast;
 
+import com.example.pattimura.sundawenang.Adapter.AdapterProduk;
+import com.example.pattimura.sundawenang.Model.ProdukModel;
 import com.example.pattimura.sundawenang.R;
+
+import java.util.ArrayList;
 
 /**
  * A simple {@link Fragment} subclass.
  */
 public class Produk extends Fragment {
-
+    AdapterProduk adapter;
+    ArrayList<ProdukModel> daftarproduk = new ArrayList<>();
 
     public Produk() {
         // Required empty public constructor
@@ -24,7 +31,24 @@ public class Produk extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_produk, container, false);
+        View v = inflater.inflate(R.layout.fragment_produk, container, false);
+        ListView list = (ListView) v.findViewById(R.id.listproduk);
+        getallproduk();
+        adapter = new AdapterProduk(this.getContext(), daftarproduk);
+        list.setAdapter(adapter);
+        adapter.notifyDataSetChanged();
+
+        return v;
+    }
+
+    private void getallproduk() {
+        daftarproduk.add(new ProdukModel("ini adalah deskripsi produk ", "Produk Tanah Liat", "17 Februari 2017"));
+        daftarproduk.add(new ProdukModel("ini adalah deskripsi produk", "Produk Boneka", "19 Februari 2017"));
+        daftarproduk.add(new ProdukModel("ini adalah deskripsi produk", "Produk Rotan", "20 Februari 2017"));
+        daftarproduk.get(0).addGambar("Guci Sasirangan", R.drawable.produk1);
+        daftarproduk.get(0).addGambar("Tanah Liat", R.drawable.produk1a);
+        daftarproduk.get(0).addGambar("Tanah Liat", R.drawable.produk1b);
+        daftarproduk.get(1).addGambar("Boneka Lucu", R.drawable.produk2);
     }
 
 }

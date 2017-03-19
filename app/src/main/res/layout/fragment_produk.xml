@@ -2,12 +2,17 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@drawable/backgroundproduk"
     tools:context="com.example.pattimura.sundawenang.Fragment.Produk">
 
     <!-- TODO: Update blank fragment layout -->
-    <TextView
+
+
+    <ListView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:text="Ini Produk" />
-
+        android:layout_marginTop="5dp"
+        android:id="@+id/listproduk"
+        android:divider="@null"
+        android:dividerHeight="0dp"/>
 </FrameLayout>

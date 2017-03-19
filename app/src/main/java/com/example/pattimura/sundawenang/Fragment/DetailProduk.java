@@ -12,6 +12,7 @@ import com.daimajia.slider.library.Animations.DescriptionAnimation;
 import com.daimajia.slider.library.SliderLayout;
 import com.daimajia.slider.library.SliderTypes.BaseSliderView;
 import com.daimajia.slider.library.SliderTypes.TextSliderView;
+import com.daimajia.slider.library.Transformers.BaseTransformer;
 import com.daimajia.slider.library.Tricks.ViewPagerEx;
 import com.example.pattimura.sundawenang.Model.GambarProduk;
 import com.example.pattimura.sundawenang.Model.ProdukModel;
@@ -63,22 +64,21 @@ public class DetailProduk extends Fragment implements BaseSliderView.OnSliderCli
                         .description(name)
                         .image(file_maps.get(name))
                         .setScaleType(BaseSliderView.ScaleType.Fit)
-                        .setOnSliderClickListener(this);
-
-                //add your extra information
-                textSliderView.bundle(new Bundle());
-                textSliderView.getBundle()
-                        .putString("extra information here !", name);
-
+                        .setOnSliderClickListener(DetailProduk.this);
                 mDemoSlider.addSlider(textSliderView);
             }
+            mDemoSlider.setPresetIndicator(SliderLayout.PresetIndicators.Center_Bottom);
             if (produk.getBanyakgambar() > 1) {
                 mDemoSlider.setPresetTransformer(SliderLayout.Transformer.ZoomOut);
-                mDemoSlider.setPresetIndicator(SliderLayout.PresetIndicators.Center_Bottom);
                 mDemoSlider.setCustomAnimation(new DescriptionAnimation());
                 mDemoSlider.setDuration(4000);
             } else {
                 mDemoSlider.stopAutoCycle();
+                mDemoSlider.setPagerTransformer(false, new BaseTransformer() {
+                    @Override
+                    protected void onTransform(View view, float v) {
+                    }
+                });
             }
         }
 

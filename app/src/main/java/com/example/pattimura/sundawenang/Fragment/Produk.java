@@ -3,9 +3,11 @@ package com.example.pattimura.sundawenang.Fragment;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.Toast;
 
@@ -38,6 +40,20 @@ public class Produk extends Fragment {
         list.setAdapter(adapter);
         adapter.notifyDataSetChanged();
 
+        list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                ProdukModel pm = daftarproduk.get(position);
+                Bundle b = new Bundle();
+                Fragment f = new DetailProduk();
+                b.putParcelable("Produk", pm);
+                f.setArguments(b);
+                FragmentTransaction ft = getFragmentManager().beginTransaction();
+                ft.replace(R.id.mainframe, f);
+                ft.commit();
+            }
+        });
+
         return v;
     }
 
@@ -47,7 +63,7 @@ public class Produk extends Fragment {
         daftarproduk.add(new ProdukModel("ini adalah deskripsi produk", "Produk Rotan", "20 Februari 2017"));
         daftarproduk.get(0).addGambar("Guci Sasirangan", R.drawable.produk1);
         daftarproduk.get(0).addGambar("Tanah Liat", R.drawable.produk1a);
-        daftarproduk.get(0).addGambar("Tanah Liat", R.drawable.produk1b);
+        daftarproduk.get(0).addGambar("Tanah Liat1", R.drawable.produk1b);
         daftarproduk.get(1).addGambar("Boneka Lucu", R.drawable.produk2);
     }
 

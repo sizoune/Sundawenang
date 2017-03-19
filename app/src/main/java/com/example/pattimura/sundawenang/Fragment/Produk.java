@@ -65,6 +65,7 @@ public class Produk extends Fragment {
         daftarproduk.get(0).addGambar("Tanah Liat", R.drawable.produk1a);
         daftarproduk.get(0).addGambar("Tanah Liat1", R.drawable.produk1b);
         daftarproduk.get(1).addGambar("Boneka Lucu", R.drawable.produk2);
+        daftarproduk.get(1).addGambar("Boneka Lucu1", R.drawable.produk1a);
     }
 
 }

@@ -17,7 +17,9 @@ public class SplashScreen extends AppCompatActivity {
         setContentView(R.layout.activity_splash_screen);
 
         ImageView logo = (ImageView) findViewById(R.id.imageView);
+        ImageView spl = (ImageView) findViewById(R.id.splashscreenimage);
         Picasso.with(this).load(R.drawable.logoidev).fit().centerCrop().into(logo);
+        Picasso.with(this).load(R.drawable.splashbg).fit().into(spl);
         if (!splashLoaded) {
             new Handler().postDelayed(new Runnable() {
                 @Override

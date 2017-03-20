@@ -1,12 +1,15 @@
 package com.example.pattimura.sundawenang.Fragment;
 
 
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.daimajia.slider.library.Animations.DescriptionAnimation;
 import com.daimajia.slider.library.SliderLayout;
@@ -20,11 +23,14 @@ import com.example.pattimura.sundawenang.R;
 
 import java.util.HashMap;
 
+import info.hoang8f.widget.FButton;
+
 /**
  * A simple {@link Fragment} subclass.
  */
 public class DetailProduk extends Fragment implements BaseSliderView.OnSliderClickListener, ViewPagerEx.OnPageChangeListener {
     ProdukModel produk;
+    FButton telp, sms;
     private SliderLayout mDemoSlider;
 
     public DetailProduk() {
@@ -46,6 +52,8 @@ public class DetailProduk extends Fragment implements BaseSliderView.OnSliderCli
             TextView judul = (TextView) v.findViewById(R.id.textNamadetailProduk);
             TextView desc = (TextView) v.findViewById(R.id.textDescDetailProduk);
             TextView tanggal = (TextView) v.findViewById(R.id.textViewTanggalDetailProduk);
+            telp = (FButton) v.findViewById(R.id.call_button);
+            sms = (FButton) v.findViewById(R.id.pesan_button);
             judul.setText(produk.getNama());
             desc.setText(produk.getDeskripsi());
             tanggal.setText(produk.getTanggal());
@@ -80,10 +88,41 @@ public class DetailProduk extends Fragment implements BaseSliderView.OnSliderCli
                     }
                 });
             }
+
+            telp.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent callintent = new Intent(Intent.ACTION_CALL);
+                    callintent.setData(Uri.parse("tel:" + produk.getNotel()));
+                    startActivity(callintent);
+                }
+            });
+
+            sms.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent smsIntent = new Intent(Intent.ACTION_VIEW);
+                    smsIntent.setType("vnd.android-dir/mms-sms");
+                    smsIntent.putExtra("address", produk.getNotel());
+                    startActivity(smsIntent);
+                }
+            });
         }
 
 
         return v;
+    }
+
+    @Override
+    public void onResume() {
+        mDemoSlider.startAutoCycle();
+        super.onResume();
+    }
+
+    @Override
+    public void onPause() {
+        mDemoSlider.stopAutoCycle();
+        super.onPause();
     }
 
     @Override

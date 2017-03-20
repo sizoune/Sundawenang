@@ -22,13 +22,14 @@ public class ProdukModel implements Parcelable {
             return new ProdukModel[size];
         }
     };
-    private String deskripsi, nama, tanggal;
+    private String deskripsi, nama, tanggal, notel;
     private ArrayList<GambarProduk> daftargambar;
 
-    public ProdukModel(String deskripsi, String nama, String tanggal) {
+    public ProdukModel(String deskripsi, String nama, String tanggal, String notel) {
         this.deskripsi = deskripsi;
         this.nama = nama;
         this.tanggal = tanggal;
+        this.notel = notel;
         daftargambar = new ArrayList<>();
     }
 
@@ -36,7 +37,16 @@ public class ProdukModel implements Parcelable {
         deskripsi = in.readString();
         nama = in.readString();
         tanggal = in.readString();
+        notel = in.readString();
         daftargambar = in.readArrayList(GambarProduk.class.getClassLoader());
+    }
+
+    public String getNotel() {
+        return notel;
+    }
+
+    public void setNotel(String notel) {
+        this.notel = notel;
     }
 
     public String getDeskripsi() {
@@ -93,6 +103,7 @@ public class ProdukModel implements Parcelable {
         dest.writeString(deskripsi);
         dest.writeString(nama);
         dest.writeString(tanggal);
+        dest.writeString(notel);
         dest.writeList(daftargambar);
     }
 

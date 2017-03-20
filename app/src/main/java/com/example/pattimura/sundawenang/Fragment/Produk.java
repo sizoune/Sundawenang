@@ -58,9 +58,9 @@ public class Produk extends Fragment {
     }
 
     private void getallproduk() {
-        daftarproduk.add(new ProdukModel("ini adalah deskripsi produk ", "Produk Tanah Liat", "17 Februari 2017"));
-        daftarproduk.add(new ProdukModel("ini adalah deskripsi produk", "Produk Boneka", "19 Februari 2017"));
-        daftarproduk.add(new ProdukModel("ini adalah deskripsi produk", "Produk Rotan", "20 Februari 2017"));
+        daftarproduk.add(new ProdukModel("ini adalah deskripsi produk ", "Produk Tanah Liat", "17 Februari 2017", "081251"));
+        daftarproduk.add(new ProdukModel("ini adalah deskripsi produk", "Produk Boneka", "19 Februari 2017", "087656"));
+        daftarproduk.add(new ProdukModel("ini adalah deskripsi produk", "Produk Rotan", "20 Februari 2017", "0192876"));
         daftarproduk.get(0).addGambar("Guci Sasirangan", R.drawable.produk1);
         daftarproduk.get(0).addGambar("Tanah Liat", R.drawable.produk1a);
         daftarproduk.get(0).addGambar("Tanah Liat1", R.drawable.produk1b);

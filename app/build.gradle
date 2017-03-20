@@ -38,5 +38,6 @@ dependencies {
     compile 'com.nineoldandroids:library:2.4.0'
     compile 'info.hoang8f:fbutton:1.0.5'
     compile "com.android.support:support-v4:+"
+    compile 'me.biubiubiu.justifytext:library:1.1'
     testCompile 'junit:junit:4.12'
 }

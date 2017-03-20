@@ -17,6 +17,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.WindowManager;
 import android.widget.TextView;
 
 import com.example.pattimura.sundawenang.Fragment.Aspirasi;
@@ -52,6 +53,7 @@ public class LandingPage extends AppCompatActivity
         judul = (TextView) toolbar.findViewById(R.id.toolbar_title);
         judul.setText("BERITA");
         fragment = new Berita();
+        this.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
         FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
         ft.replace(R.id.mainframe, fragment);
         ft.commit();

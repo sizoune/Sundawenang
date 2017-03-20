@@ -1,13 +1,52 @@
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="com.example.pattimura.sundawenang.Fragment.Berita">
 
-    <!-- TODO: Update blank fragment layout -->
-    <TextView
+    <RelativeLayout
+        android:id="@+id/textfil"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:text="Ini Berita" />
+        android:background="@drawable/backgroundberita">
+
+        <com.rengwuxian.materialedittext.MaterialEditText
+            android:id="@+id/txtfilterberita"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/border"
+            android:layout_marginLeft="15dp"
+            android:layout_marginRight="15dp"
+            android:layout_marginTop="5dp"
+            android:drawableRight="@drawable/cari"
+            android:hint="Cari Kategori"
+            android:inputType="textAutoComplete"
+            android:textSize="15dp"
+            app:met_baseColor="@android:color/black"
+            app:met_floatingLabel="normal"
+            app:met_floatingLabelTextColor="@android:color/black"
+            app:met_primaryColor="@android:color/black" />
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:focusable="true"
+            android:focusableInTouchMode="true"
+            android:layout_below="@+id/txtfilterberita">
+
+            <ListView
+                android:id="@+id/listberita"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_alignParentStart="true"
+                android:layout_alignParentTop="true"
+                android:layout_marginTop="2dp"
+                android:divider="@null"
+                android:dividerHeight="0dp" />
+
+        </RelativeLayout>
+    </RelativeLayout>
+
 
 </FrameLayout>

@@ -9,6 +9,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.RelativeLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.pattimura.sundawenang.Adapter.AdapterProduk;
@@ -35,24 +37,32 @@ public class Produk extends Fragment {
         // Inflate the layout for this fragment
         View v = inflater.inflate(R.layout.fragment_produk, container, false);
         ListView list = (ListView) v.findViewById(R.id.listproduk);
+        RelativeLayout lay = (RelativeLayout) v.findViewById(R.id.layoutproduk);
         getallproduk();
-        adapter = new AdapterProduk(this.getContext(), daftarproduk);
-        list.setAdapter(adapter);
-        adapter.notifyDataSetChanged();
+        if (!daftarproduk.isEmpty()) {
+            lay.setVisibility(View.GONE);
+            adapter = new AdapterProduk(this.getContext(), daftarproduk);
+            list.setAdapter(adapter);
+            adapter.notifyDataSetChanged();
+            list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                @Override
+                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                    ProdukModel pm = daftarproduk.get(position);
+                    Bundle b = new Bundle();
+                    Fragment f = new DetailProduk();
+                    b.putParcelable("Produk", pm);
+                    f.setArguments(b);
+                    FragmentTransaction ft = getFragmentManager().beginTransaction();
+                    ft.replace(R.id.mainframe, f);
+                    ft.commit();
+                }
+            });
+        } else {
+            lay.setVisibility(View.VISIBLE);
+            TextView a = (TextView) v.findViewById(R.id.txtEmptyproduk);
+            a.setText("Maaf, untuk sekarang belum ada Produk yang dijual !");
+        }
 
-        list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                ProdukModel pm = daftarproduk.get(position);
-                Bundle b = new Bundle();
-                Fragment f = new DetailProduk();
-                b.putParcelable("Produk", pm);
-                f.setArguments(b);
-                FragmentTransaction ft = getFragmentManager().beginTransaction();
-                ft.replace(R.id.mainframe, f);
-                ft.commit();
-            }
-        });
 
         return v;
     }

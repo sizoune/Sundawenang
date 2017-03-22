@@ -14,6 +14,8 @@ import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.RelativeLayout;
+import android.widget.TextView;
 
 import com.example.pattimura.sundawenang.Adapter.AdapterBerita;
 import com.example.pattimura.sundawenang.Model.BeritaModel;
@@ -44,9 +46,12 @@ public class Berita extends Fragment {
         ListView list = (ListView) v.findViewById(R.id.listberita);
         //MaterialEditText cari = (MaterialEditText) v.findViewById(R.id.txtfilterberita);
         getAllBerita();
-        adapter = new AdapterBerita(this.getContext(), daftarberita);
-        list.setAdapter(adapter);
-        adapter.notifyDataSetChanged();
+        RelativeLayout lay = (RelativeLayout) v.findViewById(R.id.layoutberita);
+        if (!daftarberita.isEmpty()) {
+            lay.setVisibility(View.GONE);
+            adapter = new AdapterBerita(this.getContext(), daftarberita);
+            list.setAdapter(adapter);
+            adapter.notifyDataSetChanged();
 //        cari.addTextChangedListener(new TextWatcher() {
 //            @Override
 //            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -69,19 +74,25 @@ public class Berita extends Fragment {
 //            }
 //        });
 
-        list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                BeritaModel bm = daftarberita.get(position);
-                Bundle b = new Bundle();
-                Fragment f = new DetailBerita();
-                b.putParcelable("Berita", bm);
-                f.setArguments(b);
-                FragmentTransaction ft = getFragmentManager().beginTransaction();
-                ft.replace(R.id.mainframe, f);
-                ft.commit();
-            }
-        });
+            list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                @Override
+                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                    BeritaModel bm = daftarberita.get(position);
+                    Bundle b = new Bundle();
+                    Fragment f = new DetailBerita();
+                    b.putParcelable("Berita", bm);
+                    f.setArguments(b);
+                    FragmentTransaction ft = getFragmentManager().beginTransaction();
+                    ft.replace(R.id.mainframe, f);
+                    ft.commit();
+                }
+            });
+        } else {
+            lay.setVisibility(View.VISIBLE);
+            TextView a = (TextView) v.findViewById(R.id.txtEmptyberita);
+            a.setText("Maaf, untuk sekarang belum ada Berita !");
+        }
+
 
         return v;
     }

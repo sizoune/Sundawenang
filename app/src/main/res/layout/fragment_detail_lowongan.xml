@@ -1,0 +1,71 @@
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.example.pattimura.sundawenang.Fragment.DetailLowongan">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <RelativeLayout
+            android:id="@+id/linearLayout"
+            android:layout_width="match_parent"
+            android:layout_height="200dp">
+
+            <com.daimajia.slider.library.SliderLayout
+                android:id="@+id/sliderlowongan"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"></com.daimajia.slider.library.SliderLayout>
+        </RelativeLayout>
+
+        <TextView
+            android:id="@+id/textNamadetaillowongan"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentStart="true"
+            android:layout_below="@+id/linearLayout"
+            android:layout_marginStart="13dp"
+            android:text="TextView"
+            android:textColor="@android:color/black"
+            android:textSize="25dp" />
+
+        <ImageView
+            android:id="@+id/imageView6"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:layout_alignStart="@+id/textNamadetaillowongan"
+            android:layout_below="@+id/textNamadetaillowongan"
+            android:layout_marginTop="12dp"
+            app:srcCompat="@android:drawable/ic_menu_my_calendar" />
+
+        <TextView
+            android:id="@+id/textViewTanggalDetaillowongan"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignTop="@+id/imageView6"
+            android:layout_marginStart="11dp"
+            android:layout_toEndOf="@+id/imageView6"
+            android:text="TextView"
+            android:textColor="@android:color/black" />
+
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/imageView6"
+            android:layout_margin="13dp">
+
+            <TextView
+                android:id="@+id/textDescDetailLowongan"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="TextView"
+                android:textColor="@android:color/black"
+                android:textSize="18dp" />
+
+        </ScrollView>
+
+    </RelativeLayout>
+
+</FrameLayout>

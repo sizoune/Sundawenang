@@ -10,6 +10,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.RelativeLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.pattimura.sundawenang.Adapter.AdapterAspirasi;
@@ -42,14 +44,23 @@ public class Aspirasi extends Fragment {
         ListView listAspirasi = (ListView) v.findViewById(R.id.listAspirasi);
 
         Picasso.with(Aspirasi.this.getContext()).load(R.drawable.aspirasi).fit().into(cover);
-        getdataAspirasi();
+        //getdataAspirasi();
         Bundle b = this.getArguments();
         if (b != null) {
             listaspirasi.add(new AspirasiModel(b.getString("isi"), b.getString("nama"), "", "", ""));
         }
-        adapter = new AdapterAspirasi(Aspirasi.this.getContext(), listaspirasi);
-        listAspirasi.setAdapter(adapter);
-        adapter.notifyDataSetChanged();
+        RelativeLayout lay = (RelativeLayout) v.findViewById(R.id.layoutaspirasi);
+        if (!listaspirasi.isEmpty()) {
+            lay.setVisibility(View.GONE);
+            adapter = new AdapterAspirasi(Aspirasi.this.getContext(), listaspirasi);
+            listAspirasi.setAdapter(adapter);
+            adapter.notifyDataSetChanged();
+        } else {
+            lay.setVisibility(View.VISIBLE);
+            TextView a = (TextView) v.findViewById(R.id.txtEmptyaspirasi);
+            a.setText("Maaf, untuk sekarang belum ada Aspirasi !, Mulailah menuliskan Aspirasi Anda !");
+        }
+
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

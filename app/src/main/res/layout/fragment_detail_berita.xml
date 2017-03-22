@@ -1,0 +1,98 @@
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.example.pattimura.sundawenang.Fragment.DetailBerita">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <ImageView
+            android:id="@+id/imageCoverberita"
+            android:layout_width="match_parent"
+            android:layout_height="200dp" />
+
+        <TextView
+            android:id="@+id/txtJuduldetailBerita"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/imageCoverberita"
+            android:layout_marginLeft="13dp"
+            android:layout_marginRight="13dp"
+            android:layout_marginTop="5dp"
+            android:text="Judul"
+            android:textColor="@android:color/black"
+            android:textSize="25dp" />
+
+        <GridLayout
+            android:id="@+id/grid"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/txtJuduldetailBerita"
+            android:layout_marginLeft="13dp"
+            android:layout_marginTop="5dp">
+
+            <ImageView
+                android:layout_column="0"
+                android:layout_row="0"
+                android:src="@drawable/calendar" />
+
+            <TextView
+                android:id="@+id/txtTanggaldetailberita"
+                android:layout_column="1"
+                android:layout_marginLeft="5dp"
+                android:layout_row="0"
+                android:text="Tanggal"
+                android:textColor="@android:color/black"
+                android:textSize="12dp" />
+
+            <ImageView
+                android:layout_column="2"
+                android:layout_marginLeft="20dp"
+                android:layout_row="0"
+                android:src="@drawable/category" />
+
+            <TextView
+                android:id="@+id/txtKategoridetailberita"
+                android:layout_column="3"
+                android:layout_marginLeft="5dp"
+                android:layout_row="0"
+                android:text="Kategori"
+                android:textColor="@android:color/black"
+                android:textSize="12dp" />
+
+        </GridLayout>
+
+        <android.support.v4.widget.NestedScrollView
+            android:layout_width="match_parent"
+            android:layout_height="fill_parent"
+            android:layout_below="@+id/grid"
+            android:layout_margin="13dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/txtDetailBerita"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="TextView"
+                    android:textColor="@android:color/black"
+                    android:textSize="18dp" />
+
+                <WebView
+                    android:id="@+id/video"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginTop="5dp"></WebView>
+
+            </LinearLayout>
+
+        </android.support.v4.widget.NestedScrollView>
+
+    </RelativeLayout>
+
+</FrameLayout>

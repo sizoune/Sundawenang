@@ -15,18 +15,19 @@
             android:id="@+id/border"
             android:layout_width="match_parent"
             android:layout_height="200dp"
-            android:layout_margin="12dp"
-            android:background="@drawable/customborder">
+            android:layout_margin="12dp">
 
             <com.rengwuxian.materialedittext.MaterialEditText
                 android:id="@+id/txtisiAspirasi"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/spinner1"
-                android:layout_marginLeft="15dp"
-                android:layout_marginRight="15dp"
+                android:gravity="top|left"
                 android:hint="Apa keluhan anda ?"
                 android:inputType="textMultiLine"
+                android:lines="11"
+                android:maxLines="12"
+                android:minLines="10"
+                android:scrollbars="vertical"
                 android:textSize="15dp"
                 app:met_baseColor="@android:color/black"
                 app:met_floatingLabel="normal"

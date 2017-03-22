@@ -11,6 +11,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.andexert.library.RippleView;
 import com.daimajia.slider.library.Animations.DescriptionAnimation;
 import com.daimajia.slider.library.SliderLayout;
 import com.daimajia.slider.library.SliderTypes.BaseSliderView;
@@ -30,7 +31,7 @@ import info.hoang8f.widget.FButton;
  */
 public class DetailProduk extends Fragment implements BaseSliderView.OnSliderClickListener, ViewPagerEx.OnPageChangeListener {
     ProdukModel produk;
-    FButton telp, sms;
+    //FButton telp, sms;
     private SliderLayout mDemoSlider;
 
     public DetailProduk() {
@@ -52,8 +53,8 @@ public class DetailProduk extends Fragment implements BaseSliderView.OnSliderCli
             TextView judul = (TextView) v.findViewById(R.id.textNamadetailProduk);
             TextView desc = (TextView) v.findViewById(R.id.textDescDetailProduk);
             TextView tanggal = (TextView) v.findViewById(R.id.textViewTanggalDetailProduk);
-            telp = (FButton) v.findViewById(R.id.call_button);
-            sms = (FButton) v.findViewById(R.id.pesan_button);
+            RippleView telp = (RippleView) v.findViewById(R.id.call_button);
+            RippleView sms = (RippleView) v.findViewById(R.id.pesan_button);
             judul.setText(produk.getNama());
             desc.setText(produk.getDeskripsi());
             tanggal.setText(produk.getTanggal());

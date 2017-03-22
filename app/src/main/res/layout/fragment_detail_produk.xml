@@ -12,7 +12,7 @@
         <RelativeLayout
             android:id="@+id/linearLayout"
             android:layout_width="match_parent"
-            android:layout_height="230dp">
+            android:layout_height="200dp">
 
             <com.daimajia.slider.library.SliderLayout
                 android:id="@+id/slider"
@@ -68,47 +68,108 @@
                     android:textColor="@android:color/black"
                     android:textSize="18dp" />
 
-                <info.hoang8f.widget.FButton
-                    android:id="@+id/call_button"
-                    android:layout_width="160dp"
-                    android:layout_height="60dp"
+                <LinearLayout
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
                     android:layout_below="@id/textDescDetailProduk"
-                    android:layout_marginBottom="20dp"
-                    android:layout_marginRight="20dp"
-                    android:layout_marginTop="20dp"
-                    android:drawableLeft="@drawable/call"
-                    android:drawablePadding="0dp"
-                    android:minHeight="80dp"
-                    android:minWidth="250dp"
-                    android:paddingLeft="20dp"
-                    android:paddingRight="20dp"
-                    android:paddingTop="-5dp"
-                    android:text="Telepon CP"
-                    android:textColor="@android:color/white"
-                    app:buttonColor="#388E3C"
-                    app:cornerRadius="15dp"
-                    app:shadowEnabled="true"
-                    app:shadowHeight="6dp" />
-                <info.hoang8f.widget.FButton
-                    android:id="@+id/pesan_button"
-                    android:layout_width="160dp"
-                    android:layout_height="60dp"
-                    android:layout_marginLeft="20dp"
-                    android:drawableLeft="@drawable/pesan"
-                    android:drawablePadding="0dp"
-                    android:minHeight="80dp"
-                    android:minWidth="250dp"
-                    android:paddingLeft="20dp"
-                    android:paddingRight="20dp"
-                    android:paddingTop="-5dp"
-                    android:text="Kirim Pesan CP"
-                    android:textColor="@android:color/white"
-                    app:buttonColor="#4CAF50"
-                    app:cornerRadius="15dp"
-                    app:shadowEnabled="true"
-                    app:shadowHeight="6dp"
-                    android:layout_alignBottom="@+id/call_button"
-                    android:layout_alignParentEnd="true" />
+                    android:layout_marginTop="8dp"
+                    android:orientation="horizontal">
+
+                    <com.andexert.library.RippleView
+                        android:id="@+id/pesan_button"
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        app:rv_color="#A5D6A7">
+
+                        <FrameLayout
+                            style="?android:attr/buttonStyle"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:background="#4CAF50">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center"
+                                android:drawableLeft="@drawable/pesan"
+                                android:gravity="center"
+                                android:text="Kirim Pesan CP"
+                                android:textColor="@android:color/white"
+                                android:textSize="15dp" />
+                        </FrameLayout>
+
+
+                    </com.andexert.library.RippleView>
+
+                    <com.andexert.library.RippleView
+                        android:id="@+id/call_button"
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        app:rv_color="#A5D6A7">
+
+                        <FrameLayout
+                            style="?android:attr/buttonStyle"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:background="#388E3C">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center"
+                                android:drawableLeft="@drawable/call"
+                                android:gravity="center"
+                                android:text="Telepon CP"
+                                android:textColor="@android:color/white"
+                                android:textSize="15dp" />
+                        </FrameLayout>
+                    </com.andexert.library.RippleView>
+
+                </LinearLayout>
+
+                <!--<info.hoang8f.widget.FButton-->
+                <!--android:id="@+id/call_button"-->
+                <!--android:layout_width="160dp"-->
+                <!--android:layout_height="60dp"-->
+                <!--android:layout_below="@id/textDescDetailProduk"-->
+                <!--android:layout_marginBottom="20dp"-->
+                <!--android:layout_marginRight="20dp"-->
+                <!--android:layout_marginTop="20dp"-->
+                <!--android:drawableLeft="@drawable/call"-->
+                <!--android:drawablePadding="0dp"-->
+                <!--android:minHeight="80dp"-->
+                <!--android:minWidth="250dp"-->
+                <!--android:paddingLeft="20dp"-->
+                <!--android:paddingRight="20dp"-->
+                <!--android:paddingTop="-5dp"-->
+                <!--android:text="Telepon CP"-->
+                <!--android:textColor="@android:color/white"-->
+                <!--app:buttonColor="#388E3C"-->
+                <!--app:cornerRadius="15dp"-->
+                <!--app:shadowEnabled="true"-->
+                <!--app:shadowHeight="6dp" />-->
+                <!--<info.hoang8f.widget.FButton-->
+                <!--android:id="@+id/pesan_button"-->
+                <!--android:layout_width="160dp"-->
+                <!--android:layout_height="60dp"-->
+                <!--android:layout_marginLeft="20dp"-->
+                <!--android:drawableLeft="@drawable/pesan"-->
+                <!--android:drawablePadding="0dp"-->
+                <!--android:minHeight="80dp"-->
+                <!--android:minWidth="250dp"-->
+                <!--android:paddingLeft="20dp"-->
+                <!--android:paddingRight="20dp"-->
+                <!--android:paddingTop="-5dp"-->
+                <!--android:text="Kirim Pesan CP"-->
+                <!--android:textColor="@android:color/white"-->
+                <!--app:buttonColor="#4CAF50"-->
+                <!--app:cornerRadius="15dp"-->
+                <!--app:shadowEnabled="true"-->
+                <!--app:shadowHeight="6dp"-->
+                <!--android:layout_alignBottom="@+id/call_button"-->
+                <!--android:layout_alignParentEnd="true" />-->
             </RelativeLayout>
 
         </ScrollView>

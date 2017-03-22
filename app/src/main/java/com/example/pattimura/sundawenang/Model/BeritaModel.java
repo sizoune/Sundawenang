@@ -23,7 +23,7 @@ public class BeritaModel implements Parcelable {
         }
     };
 
-    private String isiBerita, judul, tanggal, kategori;
+    private String isiBerita, judul, tanggal, kategori, urlvideo;
     private ArrayList<GambarProduk> daftargambar;
 
     public BeritaModel(String isiBerita, String judul, String tanggal, String kategori) {
@@ -31,6 +31,7 @@ public class BeritaModel implements Parcelable {
         this.judul = judul;
         this.tanggal = tanggal;
         this.kategori = kategori;
+        this.urlvideo = "";
         daftargambar = new ArrayList<>();
     }
 
@@ -39,6 +40,7 @@ public class BeritaModel implements Parcelable {
         judul = in.readString();
         tanggal = in.readString();
         kategori = in.readString();
+        urlvideo = in.readString();
         daftargambar = in.readArrayList(GambarProduk.class.getClassLoader());
     }
 
@@ -72,6 +74,14 @@ public class BeritaModel implements Parcelable {
 
     public void setKategori(String kategori) {
         this.kategori = kategori;
+    }
+
+    public String getUrlvideo() {
+        return urlvideo;
+    }
+
+    public void setUrlvideo(String urlvideo) {
+        this.urlvideo = urlvideo;
     }
 
     public ArrayList<GambarProduk> getDaftargambar() {
@@ -109,6 +119,7 @@ public class BeritaModel implements Parcelable {
         dest.writeString(judul);
         dest.writeString(tanggal);
         dest.writeString(kategori);
+        dest.writeString(urlvideo);
         dest.writeList(daftargambar);
     }
 }

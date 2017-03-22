@@ -14,19 +14,20 @@
             android:id="@+id/border"
             android:layout_width="match_parent"
             android:layout_height="200dp"
-            android:layout_margin="12dp"
-            android:background="@drawable/customborder">
+            android:layout_margin="12dp">
 
             <com.rengwuxian.materialedittext.MaterialEditText
                 android:id="@+id/txtisiAspirasi"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/spinner1"
-                android:layout_marginLeft="15dp"
-                android:layout_marginRight="15dp"
+                android:gravity="top|left"
                 android:hint="Apa yang ingin anda tulis ?"
                 android:inputType="textMultiLine"
+                android:lines="11"
                 android:maxLength="180"
+                android:maxLines="12"
+                android:minLines="10"
+                android:scrollbars="vertical"
                 android:textSize="15dp"
                 app:met_baseColor="@android:color/black"
                 app:met_floatingLabel="normal"
@@ -101,33 +102,34 @@
             android:textSize="11dp" />
 
         <LinearLayout
+            android:id="@+id/linearLayout"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="4dp"
-            android:layout_alignTop="@+id/imageKTPAspirasi"
             android:layout_alignEnd="@+id/border"
-            android:id="@+id/linearLayout">
+            android:layout_alignTop="@+id/imageKTPAspirasi"
+            android:layout_marginLeft="4dp">
+
             <TextView
                 android:id="@+id/textView3"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginBottom="11dp"
                 android:layout_marginTop="20dp"
                 android:text="Aspirasi yang anda kirim akan kami filter\nterlebih dahulu sebelum di publish\ndemi kenyamanan bersama"
-                android:textAlignment="textEnd"
-                android:layout_marginBottom="11dp" />
+                android:textAlignment="textEnd" />
         </LinearLayout>
 
         <Button
             android:id="@+id/buttonKirimAspirasi"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_alignEnd="@+id/linearLayout"
             android:layout_alignStart="@+id/textView"
             android:layout_below="@+id/textView"
             android:layout_marginTop="29dp"
             android:background="#03A9F4"
             android:text="Kirim Aspirasi"
-            android:textColor="@android:color/white"
-            android:layout_alignEnd="@+id/linearLayout" />
+            android:textColor="@android:color/white" />
 
     </RelativeLayout>
 

@@ -71,6 +71,7 @@
             android:layout_margin="13dp">
 
             <LinearLayout
+                android:id="@+id/linearvideo"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:orientation="vertical">
@@ -86,7 +87,7 @@
                 <WebView
                     android:id="@+id/video"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
+                    android:layout_height="315dp"
                     android:layout_marginTop="5dp"></WebView>
 
             </LinearLayout>

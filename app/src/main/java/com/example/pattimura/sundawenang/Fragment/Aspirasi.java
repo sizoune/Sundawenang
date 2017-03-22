@@ -2,7 +2,6 @@ package com.example.pattimura.sundawenang.Fragment;
 
 
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.view.LayoutInflater;
@@ -17,6 +16,7 @@ import android.widget.Toast;
 import com.example.pattimura.sundawenang.Adapter.AdapterAspirasi;
 import com.example.pattimura.sundawenang.Model.AspirasiModel;
 import com.example.pattimura.sundawenang.R;
+import com.github.clans.fab.FloatingActionButton;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
@@ -39,12 +39,12 @@ public class Aspirasi extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View v = inflater.inflate(R.layout.fragment_aspirasi, container, false);
-        FloatingActionButton fab = (FloatingActionButton) v.findViewById(R.id.floatingActionButton);
+        FloatingActionButton fab = (FloatingActionButton) v.findViewById(R.id.fab);
         ImageView cover = (ImageView) v.findViewById(R.id.imageView5);
         ListView listAspirasi = (ListView) v.findViewById(R.id.listAspirasi);
 
         Picasso.with(Aspirasi.this.getContext()).load(R.drawable.aspirasi).fit().into(cover);
-        //getdataAspirasi();
+        getdataAspirasi();
         Bundle b = this.getArguments();
         if (b != null) {
             listaspirasi.add(new AspirasiModel(b.getString("isi"), b.getString("nama"), "", "", ""));

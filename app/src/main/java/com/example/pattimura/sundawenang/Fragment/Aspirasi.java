@@ -11,7 +11,6 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.example.pattimura.sundawenang.Adapter.AdapterAspirasi;
 import com.example.pattimura.sundawenang.Model.AspirasiModel;

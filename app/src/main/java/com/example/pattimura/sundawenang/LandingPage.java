@@ -18,6 +18,8 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.WindowManager;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.example.pattimura.sundawenang.Fragment.Aspirasi;
@@ -26,6 +28,7 @@ import com.example.pattimura.sundawenang.Fragment.Layanan;
 import com.example.pattimura.sundawenang.Fragment.Lowongan;
 import com.example.pattimura.sundawenang.Fragment.Pengaduan;
 import com.example.pattimura.sundawenang.Fragment.Produk;
+import com.squareup.picasso.Picasso;
 
 public class LandingPage extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -49,6 +52,10 @@ public class LandingPage extends AppCompatActivity
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
+
+        View header = navigationView.getHeaderView(0);
+        ImageView gambar = (ImageView) header.findViewById(R.id.gambarHeader);
+        Picasso.with(this).load(R.drawable.head).fit().into(gambar);
 
         judul = (TextView) toolbar.findViewById(R.id.toolbar_title);
         judul.setText("BERITA");

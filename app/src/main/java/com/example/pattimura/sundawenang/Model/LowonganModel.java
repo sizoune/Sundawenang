@@ -21,13 +21,15 @@ public class LowonganModel implements Parcelable {
             return new LowonganModel[size];
         }
     };
-    private String judul, tanggal, deskripsi;
+    private String judul, tanggal, deskripsi,job_owner,notel;
     private ArrayList<GambarProduk> daftargambar;
 
-    public LowonganModel(String judul, String tanggal, String deskripsi) {
+    public LowonganModel(String judul, String tanggal, String deskripsi, String job_owner, String notel) {
         this.judul = judul;
         this.tanggal = tanggal;
         this.deskripsi = deskripsi;
+        this.job_owner = job_owner;
+        this.notel = notel;
         daftargambar = new ArrayList<>();
     }
 
@@ -35,7 +37,26 @@ public class LowonganModel implements Parcelable {
         judul = in.readString();
         tanggal = in.readString();
         deskripsi = in.readString();
+        job_owner = in.readString();
+        notel = in.readString();
         daftargambar = in.readArrayList(GambarProduk.class.getClassLoader());
+    }
+
+
+    public String getJob_owner() {
+        return job_owner;
+    }
+
+    public void setJob_owner(String job_owner) {
+        this.job_owner = job_owner;
+    }
+
+    public String getNotel() {
+        return notel;
+    }
+
+    public void setNotel(String notel) {
+        this.notel = notel;
     }
 
     public String getJudul() {
@@ -66,7 +87,7 @@ public class LowonganModel implements Parcelable {
         return daftargambar;
     }
 
-    public void addGambar(String nama, int url) {
+    public void addGambar(String nama, String url) {
         daftargambar.add(new GambarProduk(nama, url));
     }
 
@@ -93,6 +114,8 @@ public class LowonganModel implements Parcelable {
         dest.writeString(judul);
         dest.writeString(tanggal);
         dest.writeString(deskripsi);
+        dest.writeString(job_owner);
+        dest.writeString(notel);
         dest.writeList(daftargambar);
     }
 }

@@ -11,16 +11,16 @@ import java.util.ArrayList;
 
 public class GambarProduk implements Parcelable{
     private String nama;
-    private int url;
+    private String url;
 
-    public GambarProduk(String nama, int url) {
+    public GambarProduk(String nama, String url) {
         this.nama = nama;
         this.url = url;
     }
 
     protected GambarProduk(Parcel in) {
         nama = in.readString();
-        url = in.readInt();
+        url = in.readString();
     }
 
     public static final Creator<GambarProduk> CREATOR = new Creator<GambarProduk>() {
@@ -43,11 +43,11 @@ public class GambarProduk implements Parcelable{
         this.nama = nama;
     }
 
-    public int getUrl() {
+    public String getUrl() {
         return url;
     }
 
-    public void setUrl(int url) {
+    public void setUrl(String url) {
         this.url = url;
     }
 
@@ -59,6 +59,6 @@ public class GambarProduk implements Parcelable{
     @Override
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeString(nama);
-        dest.writeInt(url);
+        dest.writeString(url);
     }
 }

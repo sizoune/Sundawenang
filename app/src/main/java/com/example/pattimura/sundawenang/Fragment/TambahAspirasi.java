@@ -16,17 +16,30 @@ import android.support.v4.app.FragmentTransaction;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.android.volley.AuthFailureError;
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
 import com.example.pattimura.sundawenang.Model.AspirasiModel;
 import com.example.pattimura.sundawenang.R;
 import com.rengwuxian.materialedittext.MaterialEditText;
 import com.squareup.picasso.Picasso;
 
+import org.json.JSONArray;
+import org.json.JSONObject;
+
 import java.io.File;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.UUID;
 
 import static android.app.Activity.RESULT_OK;
@@ -79,11 +92,8 @@ public class TambahAspirasi extends Fragment implements View.OnClickListener {
             String norw = rw.getText().toString();
             if (!(isi.equals("")) && !(name.equals("")) && !(nort.equals("")) && !(norw.equals("")) && ktpFileUri != null) {
                 showProgressDialog();
-                Bundle b = new Bundle();
-                b.putString("isi", isi);
-                b.putString("nama", name);
+                KirimData(isi, name, nort, norw);
                 Fragment f = new Aspirasi();
-                f.setArguments(b);
                 hideProgressDialog();
                 FragmentTransaction ft = getFragmentManager().beginTransaction();
                 ft.replace(R.id.mainframe, f);
@@ -95,6 +105,47 @@ public class TambahAspirasi extends Fragment implements View.OnClickListener {
         } else if (v == fotoktp) {
             photoBuilder();
         }
+    }
+
+    void KirimData(final String isi, final String nama, final String rt, final String rw) {
+        //Creating a string request
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, "http://94.177.203.179/api/aspiration",
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        //tempat response di dapatkan
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        //You can handle error here if you want
+                        error.printStackTrace();
+                        Toast.makeText(TambahAspirasi.this.getContext(), "erroring: " + error.getMessage(), Toast.LENGTH_SHORT).show();
+                    }
+                }) {
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                Map<String, String> params = new HashMap<>();
+                try {
+                    //Adding parameters to request
+                    params.put("rt", rt);
+                    params.put("rw", rw);
+                    params.put("aspiration", isi);
+                    params.put("name", nama);
+                    params.put("title", nama);
+                    //returning parameter
+                    return params;
+                } catch (Exception e) {
+                    Toast.makeText(TambahAspirasi.this.getContext(), e.getMessage(), Toast.LENGTH_SHORT).show();
+                    return params;
+                }
+            }
+        };
+
+        //Adding the string request to the queue
+        RequestQueue requestQueue = Volley.newRequestQueue(this.getContext());
+        requestQueue.add(stringRequest);
     }
 
     private void photoBuilder() {

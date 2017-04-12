@@ -59,9 +59,9 @@ public class DetailProduk extends Fragment implements BaseSliderView.OnSliderCli
             desc.setText(produk.getDeskripsi());
             tanggal.setText(produk.getTanggal());
 
-            HashMap<String, Integer> file_maps = new HashMap<String, Integer>();
+            HashMap<String, String> file_maps = new HashMap<String, String>();
             if (produk.cekDaftarGambar()) {
-                file_maps.put("Coming soon !", R.drawable.imagedefault);
+                file_maps.put("Coming soon !", "");
             }
             for (GambarProduk g : produk.getDaftargambar()) {
                 file_maps.put(g.getNama(), g.getUrl());

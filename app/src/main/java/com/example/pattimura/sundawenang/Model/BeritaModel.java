@@ -92,7 +92,7 @@ public class BeritaModel implements Parcelable {
         this.daftargambar = daftargambar;
     }
 
-    public void addGambar(String nama, int url) {
+    public void addGambar(String nama, String url) {
         daftargambar.add(new GambarProduk(nama, url));
     }
 

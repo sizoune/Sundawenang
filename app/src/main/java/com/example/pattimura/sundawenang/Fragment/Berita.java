@@ -102,8 +102,8 @@ public class Berita extends Fragment {
         daftarberita.add(new BeritaModel(lorem(), "Ambulance Desa Sundawenang", "16 Februari 2017", "Kabar Desa, Publikasi"));
         daftarberita.add(new BeritaModel(lorem(), "Ridwan Kamil Menerima Penghargaan HAM", "02 Maret 2017", "Bandung, Publikasi"));
         daftarberita.get(0).setUrlvideo("https://www.youtube.com/embed/dxkXpKnS3k0");
-        daftarberita.get(0).addGambar("Acara Syukuran", R.drawable.waliband);
-        daftarberita.get(1).addGambar("Mobil Ambulan", R.drawable.ambulan);
+        daftarberita.get(0).addGambar("Acara Syukuran", "http://sundawenang-parungkuda.desa.id/wp-content/uploads/sites/391/2017/02/LOGO-RPJM-300x75.png");
+        daftarberita.get(1).addGambar("Mobil Ambulan", "http://sundawenang-parungkuda.desa.id/wp-content/uploads/sites/391/2017/02/LOGO-RPJM-300x75.png");
     }
 
     private String lorem() {

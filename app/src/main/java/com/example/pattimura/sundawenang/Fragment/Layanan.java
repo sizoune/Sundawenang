@@ -19,11 +19,20 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.android.volley.AuthFailureError;
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
 import com.example.pattimura.sundawenang.R;
 import com.rengwuxian.materialedittext.MaterialEditText;
 import com.squareup.picasso.Picasso;
 
 import java.io.File;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.UUID;
 
 import fr.ganfra.materialspinner.MaterialSpinner;
@@ -98,11 +107,66 @@ public class Layanan extends Fragment implements View.OnClickListener {
             photoBuilder();
         } else if (v == submit) {
             if (!nama.getText().toString().equals("") && ktpFileUri != null && pajakFileUri != null && !notel.getText().toString().equals("") && spinner.getSelectedItemPosition() != 0) {
+                KirimData(nama.getText().toString(), spinner.getSelectedItem().toString(), notel.getText().toString());
+                Toast.makeText(Layanan.this.getContext(), "Layanan berhasil ditambahkan !", Toast.LENGTH_SHORT).show();
 
             } else {
                 Toast.makeText(Layanan.this.getContext(), "Tolong lengkapi, Jenis layanan dan nama dan no telepon dan ktp dan pajak !", Toast.LENGTH_SHORT).show();
             }
         }
+    }
+
+    void clearData() {
+        spinner.setSelection(0);
+        nama.setText("");
+        ktpFileUri = null;
+        pajakFileUri = null;
+        Picasso.with(this.getContext()).load(R.drawable.buttonuploadfotobiru).fit().into(ktp);
+        Picasso.with(this.getContext()).load(R.drawable.buttonuploadfotoijo).fit().into(pajak);
+        Picasso.with(this.getContext()).load(R.drawable.buttonuploalainnya).fit().into(lainnya);
+        txtKtp.setText("Upload Foto KTP");
+        txtPajak.setText("Upload Foto Pajak");
+        txtLainnya.setText("Upload Lainnya");
+
+    }
+
+    void KirimData(final String nama, final String tipe, final String pone) {
+        //Creating a string request
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, "http://94.177.203.179/api/service",
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        //tempat response di dapatkan
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        //You can handle error here if you want
+                        error.printStackTrace();
+                        Toast.makeText(Layanan.this.getContext(), "erroring: " + error.getMessage(), Toast.LENGTH_SHORT).show();
+                    }
+                }) {
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                Map<String, String> params = new HashMap<>();
+                try {
+                    //Adding parameters to request
+                    params.put("name", nama);
+                    params.put("type_service", tipe);
+                    params.put("phone", pone);
+                    //returning parameter
+                    return params;
+                } catch (Exception e) {
+                    Toast.makeText(Layanan.this.getContext(), e.getMessage(), Toast.LENGTH_SHORT).show();
+                    return params;
+                }
+            }
+        };
+
+        //Adding the string request to the queue
+        RequestQueue requestQueue = Volley.newRequestQueue(this.getContext());
+        requestQueue.add(stringRequest);
     }
 
     private void photoBuilder() {

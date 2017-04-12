@@ -85,6 +85,7 @@ public class Produk extends Fragment {
                             for (int i = 0; i < listdata.length(); i++) {
                                 JSONObject object = listdata.getJSONObject(i);
                                 ProdukModel pm = new ProdukModel(object.getString("description"), object.getString("name_product"), object.getString("created_at"), object.getString("phone"));
+                                pm.addGambar("Produk ", object.getString("photo_id"));
                                 daftarproduk.add(pm);
                             }
                             if (!daftarproduk.isEmpty()) {

@@ -88,9 +88,10 @@ desa. Harap cantumkan foto bukti pembayaran pajak dan KTP asli supaya kami dapat
                 android:id="@+id/txtKTP"
                 android:layout_width="80dp"
                 android:layout_column="0"
-                android:layout_marginLeft="2dp"
+                android:layout_marginLeft="0dp"
                 android:layout_row="1"
                 android:text="Upload Foto KTP"
+                android:textAlignment="center"
                 android:textSize="10dp" />
 
             <ImageView
@@ -98,16 +99,18 @@ desa. Harap cantumkan foto bukti pembayaran pajak dan KTP asli supaya kami dapat
                 android:layout_width="80dp"
                 android:layout_height="80dp"
                 android:layout_column="1"
+                android:layout_marginLeft="2dp"
                 android:layout_row="0"
                 app:srcCompat="@mipmap/ic_launcher" />
 
             <TextView
                 android:id="@+id/txtPajak"
-                android:layout_width="90dp"
+                android:layout_width="80dp"
                 android:layout_column="1"
-                android:layout_marginLeft="2dp"
+                android:layout_marginLeft="0dp"
                 android:layout_row="1"
                 android:text="Upload Foto Pajak"
+                android:textAlignment="center"
                 android:textSize="10dp" />
 
             <ImageView
@@ -115,6 +118,7 @@ desa. Harap cantumkan foto bukti pembayaran pajak dan KTP asli supaya kami dapat
                 android:layout_width="80dp"
                 android:layout_height="80dp"
                 android:layout_column="2"
+                android:layout_marginLeft="2dp"
                 android:layout_row="0"
                 app:srcCompat="@mipmap/ic_launcher" />
 
@@ -122,9 +126,10 @@ desa. Harap cantumkan foto bukti pembayaran pajak dan KTP asli supaya kami dapat
                 android:id="@+id/txtLainnya"
                 android:layout_width="80dp"
                 android:layout_column="2"
-                android:layout_marginLeft="7dp"
+                android:layout_marginLeft="0dp"
                 android:layout_row="1"
                 android:text="Upload Lainnya"
+                android:textAlignment="center"
                 android:textSize="10dp" />
 
         </GridLayout>

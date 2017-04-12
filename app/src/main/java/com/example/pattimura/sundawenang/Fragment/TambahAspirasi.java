@@ -39,6 +39,7 @@ public class TambahAspirasi extends Fragment implements View.OnClickListener {
     private MaterialEditText isiAspirasi, nama, rt, rw;
     private TextView txtKtp;
     private ImageView fotoktp;
+    private String namafile;
     private Uri ktpFileUri = null;
     private Button submit;
 
@@ -60,6 +61,8 @@ public class TambahAspirasi extends Fragment implements View.OnClickListener {
         rw = (MaterialEditText) v.findViewById(R.id.txtRWAspirasi);
         txtKtp = (TextView) v.findViewById(R.id.textViewKTPTambahaspirasi);
         submit = (Button) v.findViewById(R.id.buttonKirimAspirasi);
+
+        Picasso.with(this.getContext()).load(R.drawable.buttonuploadfotobiru).fit().into(fotoktp);
 
         fotoktp.setOnClickListener(this);
         submit.setOnClickListener(this);
@@ -121,8 +124,7 @@ public class TambahAspirasi extends Fragment implements View.OnClickListener {
         File file = new File(Environment.getExternalStorageDirectory(), UUID.randomUUID().toString() + ".jpg");
         ktpFileUri = Uri.fromFile(file);
         takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, ktpFileUri);
-        txtKtp.setText(ktpFileUri.getLastPathSegment());
-        Picasso.with(TambahAspirasi.this.getContext()).load(R.drawable.done).fit().into(fotoktp);
+        namafile = ktpFileUri.getLastPathSegment();
         // Launch intent
         startActivityForResult(takePictureIntent, 0);
     }
@@ -154,7 +156,8 @@ public class TambahAspirasi extends Fragment implements View.OnClickListener {
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == 0) {
             if (resultCode == RESULT_OK) {
-
+                txtKtp.setText(namafile);
+                Picasso.with(TambahAspirasi.this.getContext()).load(R.drawable.done).fit().into(fotoktp);
             } else {
                 Toast.makeText(TambahAspirasi.this.getContext(), "Photo gagal diambil, tolong ulangi lagi !", Toast.LENGTH_SHORT).show();
             }

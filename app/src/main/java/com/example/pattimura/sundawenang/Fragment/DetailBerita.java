@@ -21,7 +21,7 @@ import com.squareup.picasso.Picasso;
  * A simple {@link Fragment} subclass.
  */
 public class DetailBerita extends Fragment {
-    WebView video;
+    WebView deskripsi;
     int lebar;
 
     public DetailBerita() {
@@ -39,9 +39,7 @@ public class DetailBerita extends Fragment {
         TextView judul = (TextView) v.findViewById(R.id.txtJuduldetailBerita);
         TextView tanggal = (TextView) v.findViewById(R.id.txtTanggaldetailberita);
         TextView kategori = (TextView) v.findViewById(R.id.txtKategoridetailberita);
-        TextView deskripsi = (TextView) v.findViewById(R.id.txtDetailBerita);
-        video = (WebView) v.findViewById(R.id.video);
-        video.setVisibility(View.GONE);
+        deskripsi = (WebView) v.findViewById(R.id.video);
 
         Bundle b = this.getArguments();
         if (b != null) {
@@ -55,19 +53,21 @@ public class DetailBerita extends Fragment {
             judul.setText(berita.getJudul());
             tanggal.setText(berita.getTanggal());
             kategori.setText(berita.getKategori());
-            deskripsi.setText(berita.getIsiBerita());
-            if (!berita.getUrlvideo().equals("")) {
-                video.setVisibility(View.VISIBLE);
-                video.setWebViewClient(new WebViewClient() {
-                    @Override
-                    public boolean shouldOverrideUrlLoading(WebView view, String url) {
-                        return false;
-                    }
-                });
-                video.getSettings().setJavaScriptEnabled(true);
-                video.loadUrl(berita.getUrlvideo());
-
-            }
+            deskripsi.setWebViewClient(new WebViewClient());
+            deskripsi.getSettings().setJavaScriptEnabled(true);
+            deskripsi.loadData(berita.getIsiBerita(), "text/html", "UTF-8");
+//            if (!berita.getUrlvideo().equals("")) {
+//                video.setVisibility(View.VISIBLE);
+//                video.setWebViewClient(new WebViewClient() {
+//                    @Override
+//                    public boolean shouldOverrideUrlLoading(WebView view, String url) {
+//                        return false;
+//                    }
+//                });
+//                video.getSettings().setJavaScriptEnabled(true);
+//                video.loadUrl(berita.getUrlvideo());
+//
+//            }
         }
 
 
@@ -76,14 +76,13 @@ public class DetailBerita extends Fragment {
 
     @Override
     public void onResume() {
+        deskripsi.onResume();
         super.onResume();
-        video.onResume();
     }
 
     @Override
-    public void onPause() {
-        super.onPause();
-        video.onPause();
+    public void onStop() {
+        deskripsi.onPause();
+        super.onStop();
     }
-
 }

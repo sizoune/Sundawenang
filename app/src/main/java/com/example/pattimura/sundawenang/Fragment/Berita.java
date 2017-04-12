@@ -98,7 +98,7 @@ public class Berita extends Fragment {
     }
 
     private void getAllBerita() {
-        daftarberita.add(new BeritaModel(lorem(), "Kades Sambut Wali Band Renovasi Mushola Al-Ikhlas", "17 Februari 2017", "Kabar Desa, Publikasi"));
+        daftarberita.add(new BeritaModel(descBerita1(), "Kades Sambut Wali Band Renovasi Mushola Al-Ikhlas", "17 Februari 2017", "Kabar Desa, Publikasi"));
         daftarberita.add(new BeritaModel(lorem(), "Ambulance Desa Sundawenang", "16 Februari 2017", "Kabar Desa, Publikasi"));
         daftarberita.add(new BeritaModel(lorem(), "Ridwan Kamil Menerima Penghargaan HAM", "02 Maret 2017", "Bandung, Publikasi"));
         daftarberita.get(0).setUrlvideo("https://www.youtube.com/embed/dxkXpKnS3k0");
@@ -108,6 +108,10 @@ public class Berita extends Fragment {
 
     private String lorem() {
         return "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.";
+    }
+
+    private String descBerita1() {
+        return " <p>Kepala Desa Sundawenang berserta Muspika dan warga, Kamis (16/2) sore, sambut kedatangan Grup Band Wali di Kampung Pangadegan RT 17/08, Desa Sundawenang Kecamatan Parungkuda Kabupaten Sukabumi. Kedatangan Apoy dan rekan-rekannya bukan untuk konser melainkan untuk mewujudkan pembangunan 100 Mushola Indah.</p> <p><iframe frameborder=\"0\" width=\"640\" height=\"362\" src=\"https://www.dailymotion.com/embed/video/x5c6jvt\" allowfullscreen></iframe></p> <blockquote><p>Perbaikan Mushola Al-Ikhlas ini dikarenakan kondisi yang cukup rusak sehingga Program Muin dari Grup Band Wali bisa direalisasikan. Waliband mencanangkan waktu perbaikan ini bisa rampung dalam kurun waktu satu bulan.</p> <p>“Mudah-mudahan tidak 100 Mushola saja yang diperbaiki akan tetapi bisa 1000 atau 1 juta mushola yang diperbaiki” tutur Kepala desa Sundawenang. Program ini mudah-mudahan bisa memotivasi warga Desa sundawenang beserta pihak-pihak terkait untuk mewujudkan Pembangunan di Desa Sundawenang. “Kami kesini bukan bukan memberikan uang, melaikan kami kesini untuk menyindir bahwa kami saja yang jauh peduli masa pribuminya tidak peduli’ ungkap Kang Apoy.</p> <p>#salam 5 waktu.</p> <p>Reporter: Kang Zey &amp; Redaktur: Rizzal</p></blockquote> <p>&nbsp;</p>";
     }
 
 }

@@ -40,6 +40,7 @@ public class Layanan extends Fragment implements View.OnClickListener {
     private Uri ktpFileUri = null;
     private Uri lainFileUri = null;
     private String status = "";
+    private String namafile;
     private ImageView ktp, pajak, lainnya;
     private Button submit;
     private TextView txtKtp, txtPajak, txtLainnya;
@@ -65,6 +66,10 @@ public class Layanan extends Fragment implements View.OnClickListener {
         nama = (MaterialEditText) v.findViewById(R.id.txtNama);
         notel = (MaterialEditText) v.findViewById(R.id.txtTelp);
         submit = (Button) v.findViewById(R.id.buttonLayanan);
+
+        Picasso.with(this.getContext()).load(R.drawable.buttonuploadfotobiru).fit().into(ktp);
+        Picasso.with(this.getContext()).load(R.drawable.buttonuploadfotoijo).fit().into(pajak);
+        Picasso.with(this.getContext()).load(R.drawable.buttonuploalainnya).fit().into(lainnya);
 
         String[] layanan = {"Pembuatan E-KTP", "Pembuatan Kartu Keluarga", "Layanan Posyandu"};
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(Layanan.this.getContext(), android.R.layout.simple_spinner_item, layanan);
@@ -128,18 +133,15 @@ public class Layanan extends Fragment implements View.OnClickListener {
         if (status.equals("ktp")) {
             ktpFileUri = Uri.fromFile(file);
             takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, ktpFileUri);
-            txtKtp.setText(ktpFileUri.getLastPathSegment());
-            Picasso.with(Layanan.this.getContext()).load(R.drawable.done).fit().into(ktp);
+            namafile = ktpFileUri.getLastPathSegment();
         } else if (status.equals("pajak")) {
             pajakFileUri = Uri.fromFile(file);
             takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, pajakFileUri);
-            txtPajak.setText(pajakFileUri.getLastPathSegment());
-            Picasso.with(Layanan.this.getContext()).load(R.drawable.done).fit().into(pajak);
+            namafile = pajakFileUri.getLastPathSegment();
         } else if (status.equals("lainnya")) {
             lainFileUri = Uri.fromFile(file);
             takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, lainFileUri);
-            txtLainnya.setText(lainFileUri.getLastPathSegment());
-            Picasso.with(Layanan.this.getContext()).load(R.drawable.done).fit().into(lainnya);
+            namafile = lainFileUri.getLastPathSegment();
         }
         // Launch intent
         startActivityForResult(takePictureIntent, 0);
@@ -155,7 +157,16 @@ public class Layanan extends Fragment implements View.OnClickListener {
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == 0) {
             if (resultCode == RESULT_OK) {
-
+                if (status.equals("ktp")) {
+                    txtKtp.setText(namafile);
+                    Picasso.with(Layanan.this.getContext()).load(R.drawable.done).fit().into(ktp);
+                } else if (status.equals("pajak")) {
+                    txtPajak.setText(namafile);
+                    Picasso.with(Layanan.this.getContext()).load(R.drawable.done).fit().into(pajak);
+                } else if (status.equals("lainnya")) {
+                    txtLainnya.setText(namafile);
+                    Picasso.with(Layanan.this.getContext()).load(R.drawable.done).fit().into(lainnya);
+                }
             } else {
                 Toast.makeText(Layanan.this.getContext(), "Photo gagal diambil, tolong ulangi lagi !", Toast.LENGTH_SHORT).show();
             }

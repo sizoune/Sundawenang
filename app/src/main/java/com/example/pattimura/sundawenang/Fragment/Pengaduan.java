@@ -36,6 +36,7 @@ public class Pengaduan extends Fragment implements View.OnClickListener {
     private Uri ktpFileUri = null;
     private String status = "";
     private ImageView ktp, pajak;
+    private String namafile;
     private Button submit;
     private TextView txtKtp, txtPajak;
     private MaterialEditText isiPengaduan;
@@ -57,6 +58,9 @@ public class Pengaduan extends Fragment implements View.OnClickListener {
         ktp = (ImageView) v.findViewById(R.id.imageViewKTPPengaduan);
         pajak = (ImageView) v.findViewById(R.id.imageViewPajakPengaduan);
         submit = (Button) v.findViewById(R.id.buttonPengaduan);
+
+        Picasso.with(this.getContext()).load(R.drawable.buttonuploadfotobiru).fit().into(ktp);
+        Picasso.with(this.getContext()).load(R.drawable.buttonuploadfotoijo).fit().into(pajak);
 
         ktp.setOnClickListener(this);
         pajak.setOnClickListener(this);
@@ -110,15 +114,11 @@ public class Pengaduan extends Fragment implements View.OnClickListener {
         if (status.equals("ktp")) {
             ktpFileUri = Uri.fromFile(file);
             takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, ktpFileUri);
-            txtKtp.setText(ktpFileUri.getLastPathSegment());
-            Picasso.with(Pengaduan.this.getContext()).load(R.drawable.done).fit().into(ktp);
+            namafile = ktpFileUri.getLastPathSegment();
         } else if (status.equals("pajak")) {
             pajakFileUri = Uri.fromFile(file);
             takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, pajakFileUri);
-            txtPajak.setText(pajakFileUri.getLastPathSegment());
-            Picasso.with(Pengaduan.this.getContext()).load(R.drawable.done).fit().into(pajak);
-        } else {
-
+            namafile = pajakFileUri.getLastPathSegment();
         }
         // Launch intent
         startActivityForResult(takePictureIntent, 0);
@@ -134,7 +134,13 @@ public class Pengaduan extends Fragment implements View.OnClickListener {
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == 0) {
             if (resultCode == RESULT_OK) {
-
+                if (status.equals("ktp")) {
+                    txtKtp.setText(namafile);
+                    Picasso.with(Pengaduan.this.getContext()).load(R.drawable.done).fit().into(ktp);
+                } else if (status.equals("pajak")) {
+                    txtPajak.setText(namafile);
+                    Picasso.with(Pengaduan.this.getContext()).load(R.drawable.done).fit().into(pajak);
+                }
             } else {
                 Toast.makeText(Pengaduan.this.getContext(), "Photo gagal diambil, tolong ulangi lagi !", Toast.LENGTH_SHORT).show();
             }

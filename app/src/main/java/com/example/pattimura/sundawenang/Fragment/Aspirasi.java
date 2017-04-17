@@ -20,6 +20,7 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.baoyz.widget.PullRefreshLayout;
 import com.example.pattimura.sundawenang.Adapter.AdapterAspirasi;
 import com.example.pattimura.sundawenang.Model.AspirasiModel;
 import com.example.pattimura.sundawenang.R;
@@ -63,6 +64,20 @@ public class Aspirasi extends Fragment {
         lay = (RelativeLayout) v.findViewById(R.id.layoutaspirasi);
         getdataAspirasi();
 
+        final PullRefreshLayout layout = (PullRefreshLayout) v.findViewById(R.id.swipeRefreshLayout);
+        layout.setRefreshStyle(PullRefreshLayout.STYLE_MATERIAL);
+        layout.setOnRefreshListener(new PullRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                layout.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        getdataAspirasi();
+                        layout.setRefreshing(false);
+                    }
+                }, 1000);
+            }
+        });
 
         fab.setOnClickListener(new View.OnClickListener() {
             @Override

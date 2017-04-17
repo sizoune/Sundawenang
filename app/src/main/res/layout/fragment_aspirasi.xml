@@ -63,14 +63,23 @@
                 android:textStyle="bold" />
         </RelativeLayout>
 
-        <ListView
-            android:id="@+id/listAspirasi"
+        <com.baoyz.widget.PullRefreshLayout
+            android:id="@+id/swipeRefreshLayout"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_alignParentStart="true"
-            android:layout_below="@+id/relativ"
-            android:divider="@null"
-            android:dividerHeight="0dp" />
+            android:layout_below="@+id/relativ">
+
+            <ListView
+                android:id="@+id/listAspirasi"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_alignParentStart="true"
+                android:layout_below="@+id/relativ"
+                android:divider="@null"
+                android:dividerHeight="0dp" />
+
+        </com.baoyz.widget.PullRefreshLayout>
+
 
         <RelativeLayout
             android:id="@+id/layoutaspirasi"

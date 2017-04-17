@@ -6,6 +6,8 @@ import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
@@ -13,6 +15,7 @@ import android.provider.MediaStore;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -23,6 +26,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.volley.AuthFailureError;
+import com.android.volley.NetworkResponse;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
@@ -31,10 +35,14 @@ import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.example.pattimura.sundawenang.Model.AspirasiModel;
 import com.example.pattimura.sundawenang.R;
+import com.example.pattimura.sundawenang.VolleyHelper.AppHelper;
+import com.example.pattimura.sundawenang.VolleyHelper.VolleyMultipartRequest;
+import com.example.pattimura.sundawenang.VolleyHelper.VolleySingleton;
 import com.rengwuxian.materialedittext.MaterialEditText;
 import com.squareup.picasso.Picasso;
 
 import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.File;
@@ -54,6 +62,7 @@ public class TambahAspirasi extends Fragment implements View.OnClickListener {
     private ImageView fotoktp;
     private String namafile;
     private Uri ktpFileUri = null;
+    private File files;
     private Button submit;
 
     public TambahAspirasi() {
@@ -92,7 +101,8 @@ public class TambahAspirasi extends Fragment implements View.OnClickListener {
             String norw = rw.getText().toString();
             if (!(isi.equals("")) && !(name.equals("")) && !(nort.equals("")) && !(norw.equals("")) && ktpFileUri != null) {
                 showProgressDialog();
-                KirimData(isi, name, nort, norw);
+                kirimData(ktpFileUri, isi, name, nort, norw);
+                //postGambar(ktpFileUri);
                 Fragment f = new Aspirasi();
                 hideProgressDialog();
                 FragmentTransaction ft = getFragmentManager().beginTransaction();
@@ -107,45 +117,51 @@ public class TambahAspirasi extends Fragment implements View.OnClickListener {
         }
     }
 
-    void KirimData(final String isi, final String nama, final String rt, final String rw) {
-        //Creating a string request
-        StringRequest stringRequest = new StringRequest(Request.Method.POST, "http://94.177.203.179/api/aspiration",
-                new Response.Listener<String>() {
-                    @Override
-                    public void onResponse(String response) {
-                        //tempat response di dapatkan
-                    }
-                },
-                new Response.ErrorListener() {
-                    @Override
-                    public void onErrorResponse(VolleyError error) {
-                        //You can handle error here if you want
-                        error.printStackTrace();
-                        Toast.makeText(TambahAspirasi.this.getContext(), "erroring: " + error.getMessage(), Toast.LENGTH_SHORT).show();
-                    }
-                }) {
+
+    private void kirimData(final Uri fileUri, final String isi, final String nama, final String rt, final String rw) {
+        //final ProgressDialog dialog = ProgressDialog.show(TambahAspirasi.this.getContext(), "", "Loading. Please wait...", true);
+        VolleyMultipartRequest multipartRequest = new VolleyMultipartRequest(Request.Method.POST, "http://94.177.203.179/api/aspiration", new Response.Listener<NetworkResponse>() {
             @Override
-            protected Map<String, String> getParams() throws AuthFailureError {
+            public void onResponse(NetworkResponse response) {
+                String resultResponse = new String(response.data);
+//                try {
+//
+//                } catch (JSONException e) {
+//                    e.printStackTrace();
+//                }
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                error.printStackTrace();
+//
+                //dialog.dismiss();
+
+            }
+        }) {
+            @Override
+            protected Map<String, String> getParams() {
                 Map<String, String> params = new HashMap<>();
-                try {
-                    //Adding parameters to request
-                    params.put("rt", rt);
-                    params.put("rw", rw);
-                    params.put("aspiration", isi);
-                    params.put("name", nama);
-                    params.put("title", nama);
-                    //returning parameter
-                    return params;
-                } catch (Exception e) {
-                    Toast.makeText(TambahAspirasi.this.getContext(), e.getMessage(), Toast.LENGTH_SHORT).show();
-                    return params;
-                }
+                params.put("rt", rt);
+                params.put("rw", rw);
+                params.put("aspiration", isi);
+                params.put("name", nama);
+                params.put("title", nama);
+                return params;
+            }
+
+            @Override
+            protected Map<String, DataPart> getByteData() {
+                Map<String, DataPart> params = new HashMap<>();
+                // file name could found file base or direct access from real path
+                // for now just get bitmap data from ImageView
+                params.put("photo_id", new DataPart(fileUri.getLastPathSegment(), AppHelper.getFileDataFromDrawable(TambahAspirasi.this.getContext(), fotoktp.getDrawable()), "image/jpeg"));
+
+                return params;
             }
         };
 
-        //Adding the string request to the queue
-        RequestQueue requestQueue = Volley.newRequestQueue(this.getContext());
-        requestQueue.add(stringRequest);
+        VolleySingleton.getInstance(TambahAspirasi.this.getContext()).addToRequestQueue(multipartRequest);
     }
 
     private void photoBuilder() {
@@ -173,6 +189,7 @@ public class TambahAspirasi extends Fragment implements View.OnClickListener {
 
         // Choose file storage location
         File file = new File(Environment.getExternalStorageDirectory(), UUID.randomUUID().toString() + ".jpg");
+        files = file;
         ktpFileUri = Uri.fromFile(file);
         takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, ktpFileUri);
         namafile = ktpFileUri.getLastPathSegment();
@@ -208,7 +225,8 @@ public class TambahAspirasi extends Fragment implements View.OnClickListener {
         if (requestCode == 0) {
             if (resultCode == RESULT_OK) {
                 txtKtp.setText(namafile);
-                Picasso.with(TambahAspirasi.this.getContext()).load(R.drawable.done).fit().into(fotoktp);
+                //postGambar(ktpFileUri);
+                Picasso.with(TambahAspirasi.this.getContext()).load(files).fit().into(fotoktp);
             } else {
                 Toast.makeText(TambahAspirasi.this.getContext(), "Photo gagal diambil, tolong ulangi lagi !", Toast.LENGTH_SHORT).show();
             }
@@ -222,9 +240,11 @@ public class TambahAspirasi extends Fragment implements View.OnClickListener {
                 String filePath = cursor.getString(columnIndex);
                 cursor.close();
                 File file = new File(filePath);
+                files = file;
                 ktpFileUri = Uri.fromFile(file);
+                //postGambar(ktpFileUri);
                 txtKtp.setText(ktpFileUri.getLastPathSegment());
-                Picasso.with(TambahAspirasi.this.getContext()).load(R.drawable.done).fit().into(fotoktp);
+                Picasso.with(TambahAspirasi.this.getContext()).load(file).fit().into(fotoktp);
             } else {
                 Toast.makeText(TambahAspirasi.this.getContext(), "Photo gagal diambil, tolong ulangi lagi !", Toast.LENGTH_SHORT).show();
             }

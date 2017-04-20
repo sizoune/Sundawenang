@@ -32,7 +32,7 @@ public class AdapterAspirasi extends BaseAdapter {
 
     @Override
     public AspirasiModel getItem(int position) {
-        return isiAspirasi.get(getCount() - position - 1);
+        return isiAspirasi.get(position);
     }
 
     @Override

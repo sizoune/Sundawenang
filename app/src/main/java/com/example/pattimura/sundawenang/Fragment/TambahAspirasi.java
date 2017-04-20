@@ -8,6 +8,7 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
@@ -59,11 +60,12 @@ public class TambahAspirasi extends Fragment implements View.OnClickListener {
     private ProgressDialog mProgressDialog;
     private MaterialEditText isiAspirasi, nama, rt, rw;
     private TextView txtKtp;
-    private ImageView fotoktp;
-    private String namafile;
+    private ImageView fotoktp, temp;
+    private String namafile, token;
     private Uri ktpFileUri = null;
     private File files;
     private Button submit;
+    private Drawable picktp;
 
     public TambahAspirasi() {
         // Required empty public constructor
@@ -76,6 +78,8 @@ public class TambahAspirasi extends Fragment implements View.OnClickListener {
         // Inflate the layout for this fragment
         View v = inflater.inflate(R.layout.fragment_tambah_aspirasi, container, false);
 
+        temp = new ImageView(TambahAspirasi.this.getContext());
+
         fotoktp = (ImageView) v.findViewById(R.id.imageKTPAspirasi);
         isiAspirasi = (MaterialEditText) v.findViewById(R.id.txtisiAspirasi);
         nama = (MaterialEditText) v.findViewById(R.id.txtNamaAspirasi);
@@ -84,6 +88,9 @@ public class TambahAspirasi extends Fragment implements View.OnClickListener {
         txtKtp = (TextView) v.findViewById(R.id.textViewKTPTambahaspirasi);
         submit = (Button) v.findViewById(R.id.buttonKirimAspirasi);
 
+        Bundle b = getArguments();
+        token = b.getString("token");
+        //Toast.makeText(TambahAspirasi.this.getContext(), token, Toast.LENGTH_SHORT).show();
         Picasso.with(this.getContext()).load(R.drawable.buttonuploadfotobiru).fit().into(fotoktp);
 
         fotoktp.setOnClickListener(this);
@@ -105,6 +112,9 @@ public class TambahAspirasi extends Fragment implements View.OnClickListener {
                 //postGambar(ktpFileUri);
                 Fragment f = new Aspirasi();
                 hideProgressDialog();
+                Bundle b = new Bundle();
+                b.putString("token", token);
+                f.setArguments(b);
                 FragmentTransaction ft = getFragmentManager().beginTransaction();
                 ft.replace(R.id.mainframe, f);
                 ft.commit();
@@ -120,7 +130,7 @@ public class TambahAspirasi extends Fragment implements View.OnClickListener {
 
     private void kirimData(final Uri fileUri, final String isi, final String nama, final String rt, final String rw) {
         //final ProgressDialog dialog = ProgressDialog.show(TambahAspirasi.this.getContext(), "", "Loading. Please wait...", true);
-        VolleyMultipartRequest multipartRequest = new VolleyMultipartRequest(Request.Method.POST, "http://94.177.203.179/api/aspiration", new Response.Listener<NetworkResponse>() {
+        VolleyMultipartRequest multipartRequest = new VolleyMultipartRequest(Request.Method.POST, "http://94.177.203.179/api/aspiration?token=" + "\"" + token + "\"", new Response.Listener<NetworkResponse>() {
             @Override
             public void onResponse(NetworkResponse response) {
                 String resultResponse = new String(response.data);
@@ -226,6 +236,7 @@ public class TambahAspirasi extends Fragment implements View.OnClickListener {
             if (resultCode == RESULT_OK) {
                 txtKtp.setText(namafile);
                 //postGambar(ktpFileUri);
+                picktp = Drawable.createFromPath(ktpFileUri.getPath());
                 Picasso.with(TambahAspirasi.this.getContext()).load(files).fit().into(fotoktp);
             } else {
                 Toast.makeText(TambahAspirasi.this.getContext(), "Photo gagal diambil, tolong ulangi lagi !", Toast.LENGTH_SHORT).show();
@@ -242,6 +253,7 @@ public class TambahAspirasi extends Fragment implements View.OnClickListener {
                 File file = new File(filePath);
                 files = file;
                 ktpFileUri = Uri.fromFile(file);
+                picktp = Drawable.createFromPath(ktpFileUri.getPath());
                 //postGambar(ktpFileUri);
                 txtKtp.setText(ktpFileUri.getLastPathSegment());
                 Picasso.with(TambahAspirasi.this.getContext()).load(file).fit().into(fotoktp);

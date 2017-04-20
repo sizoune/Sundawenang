@@ -1,5 +1,6 @@
 package com.example.pattimura.sundawenang;
 
+import android.app.ProgressDialog;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -18,23 +19,45 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.WindowManager;
+import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.android.volley.AuthFailureError;
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
+import com.example.pattimura.sundawenang.Adapter.AdapterProduk;
 import com.example.pattimura.sundawenang.Fragment.Aspirasi;
 import com.example.pattimura.sundawenang.Fragment.Berita;
+import com.example.pattimura.sundawenang.Fragment.DetailProduk;
 import com.example.pattimura.sundawenang.Fragment.Layanan;
 import com.example.pattimura.sundawenang.Fragment.Lowongan;
 import com.example.pattimura.sundawenang.Fragment.Pengaduan;
 import com.example.pattimura.sundawenang.Fragment.Produk;
+import com.example.pattimura.sundawenang.Model.ProdukModel;
+
 import com.squareup.picasso.Picasso;
+
+import org.json.JSONArray;
+import org.json.JSONObject;
+
+import java.util.HashMap;
+import java.util.Map;
 
 public class LandingPage extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
     Fragment fragment;
     TextView judul;
+    String token;
+    private ProgressDialog mProgressDialog;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,13 +73,18 @@ public class LandingPage extends AppCompatActivity
         drawer.setDrawerListener(toggle);
         toggle.syncState();
 
+        Bundle b = getIntent().getExtras();
+        if (b != null) {
+            token = b.getString("token");
+            //Toast.makeText(this, token, Toast.LENGTH_SHORT).show();
+        }
+
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
         View header = navigationView.getHeaderView(0);
         ImageView gambar = (ImageView) header.findViewById(R.id.gambarHeader);
         Picasso.with(this).load(R.drawable.head).fit().into(gambar);
-
         judul = (TextView) toolbar.findViewById(R.id.toolbar_title);
         judul.setText("BERITA");
         fragment = new Berita();
@@ -65,6 +93,7 @@ public class LandingPage extends AppCompatActivity
         ft.replace(R.id.mainframe, fragment);
         ft.commit();
     }
+
 
     @Override
     public void onBackPressed() {
@@ -83,6 +112,22 @@ public class LandingPage extends AppCompatActivity
         return true;
     }
 
+    private void showProgressDialog() {
+        if (mProgressDialog == null) {
+            mProgressDialog = new ProgressDialog(this);
+            mProgressDialog.setMessage("Mohon tunggu, sedang mengambil data !");
+            mProgressDialog.setIndeterminate(true);
+        }
+
+        mProgressDialog.show();
+    }
+
+    private void hideProgressDialog() {
+        if (mProgressDialog != null && mProgressDialog.isShowing()) {
+            mProgressDialog.dismiss();
+        }
+    }
+
 
     @SuppressWarnings("StatementWithEmptyBody")
     @Override
@@ -99,30 +144,45 @@ public class LandingPage extends AppCompatActivity
         } else if (id == R.id.nav_lowongan) {
             judul.setText("LOWONGAN");
             fragment = new Lowongan();
+            Bundle b = new Bundle();
+            b.putString("token", token);
+            fragment.setArguments(b);
             FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
             ft.replace(R.id.mainframe, fragment);
             ft.commit();
         } else if (id == R.id.nav_produk) {
             judul.setText("PRODUK");
             fragment = new Produk();
+            Bundle b = new Bundle();
+            b.putString("token", token);
+            fragment.setArguments(b);
             FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
             ft.replace(R.id.mainframe, fragment);
             ft.commit();
         } else if (id == R.id.nav_layanan) {
             judul.setText("PELAYANAN");
             fragment = new Layanan();
+            Bundle b = new Bundle();
+            b.putString("token", token);
+            fragment.setArguments(b);
             FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
             ft.replace(R.id.mainframe, fragment);
             ft.commit();
         } else if (id == R.id.nav_aspirasi) {
             judul.setText("ASPIRASI");
             fragment = new Aspirasi();
+            Bundle b = new Bundle();
+            b.putString("token", token);
+            fragment.setArguments(b);
             FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
             ft.replace(R.id.mainframe, fragment);
             ft.commit();
         } else if (id == R.id.nav_pengaduan) {
             judul.setText("PENGADUAN");
             fragment = new Pengaduan();
+            Bundle b = new Bundle();
+            b.putString("token", token);
+            fragment.setArguments(b);
             FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
             ft.replace(R.id.mainframe, fragment);
             ft.commit();

@@ -7,19 +7,28 @@
 
     <!-- TODO: Update blank fragment layout -->
 
-
-    <ListView
+    <com.baoyz.widget.PullRefreshLayout
+        android:id="@+id/swipeRefreshLayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginTop="5dp"
-        android:id="@+id/listproduk"
-        android:divider="@null"
-        android:dividerHeight="0dp"/>
+        android:layout_marginTop="5dp">
+
+        <ListView
+            android:id="@+id/listproduk"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginTop="5dp"
+            android:divider="@null"
+            android:dividerHeight="0dp" />
+
+    </com.baoyz.widget.PullRefreshLayout>
+
 
     <RelativeLayout
         android:id="@+id/layoutproduk"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
+
         <TextView
             android:id="@+id/txtEmptyproduk"
             android:layout_width="wrap_content"

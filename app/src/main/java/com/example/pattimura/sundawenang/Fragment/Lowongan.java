@@ -1,12 +1,14 @@
 package com.example.pattimura.sundawenang.Fragment;
 
 
+import android.app.ProgressDialog;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
@@ -20,6 +22,7 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.baoyz.widget.PullRefreshLayout;
 import com.example.pattimura.sundawenang.Adapter.AdpterLowongan;
 import com.example.pattimura.sundawenang.Model.AspirasiModel;
 import com.example.pattimura.sundawenang.Model.LowonganModel;
@@ -40,6 +43,9 @@ public class Lowongan extends Fragment {
     ArrayList<LowonganModel> daftarlowongan = new ArrayList<>();
     RelativeLayout kosong;
     ListView listlowongan;
+    String token;
+    int currentpage, lastpage, banyakdata, currentFirstVisibleItem, currentVisibleItemCount, currentScrollState;
+    private ProgressDialog mProgressDialog;
 
     public Lowongan() {
         // Required empty public constructor
@@ -52,10 +58,66 @@ public class Lowongan extends Fragment {
         // Inflate the layout for this fragment
         View v = inflater.inflate(R.layout.fragment_lowongan, container, false);
 
+        currentpage = 1;
+        lastpage = 1;
+
+        Bundle b = getArguments();
+        if (b != null) {
+            token = b.getString("token");
+        }
+
         listlowongan = (ListView) v.findViewById(R.id.listLowongan);
         kosong = (RelativeLayout) v.findViewById(R.id.layoutlowongan);
-        getAlllowongan();
+        adapter = new AdpterLowongan(Lowongan.this.getContext(), daftarlowongan);
+        listlowongan.setAdapter(adapter);
+        showProgressDialog();
+        getAlllowongan(currentpage);
+        adapter.notifyDataSetChanged();
 
+        final PullRefreshLayout layout = (PullRefreshLayout) v.findViewById(R.id.swipeRefreshLayout);
+        layout.setRefreshStyle(PullRefreshLayout.STYLE_MATERIAL);
+        layout.setOnRefreshListener(new PullRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                layout.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        if (currentpage != lastpage) {
+                            daftarlowongan = new ArrayList<>();
+                            adapter = new AdpterLowongan(Lowongan.this.getContext(), daftarlowongan);
+                            getAlllowongan(currentpage);
+                        }
+                        layout.setRefreshing(false);
+                    }
+                }, 1000);
+            }
+        });
+
+        listlowongan.setOnScrollListener(new AbsListView.OnScrollListener() {
+            @Override
+            public void onScrollStateChanged(AbsListView view, int scrollState) {
+                currentScrollState = scrollState;
+                isScrollCompleted();
+            }
+
+            private void isScrollCompleted() {
+                if (currentVisibleItemCount > 0 && currentScrollState == SCROLL_STATE_IDLE) {
+                    /*** In this way I detect if there's been a scroll which has completed ***/
+                    /*** do the work for load more date! ***/
+                    if (currentpage != lastpage) {
+                        currentpage++;
+                        getAlllowongan(currentpage);
+                    }
+                }
+            }
+
+            @Override
+            public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
+                //Toast.makeText(Aspirasi.this.getContext(), Integer.toString(totalItemCount), Toast.LENGTH_SHORT).show();
+                currentFirstVisibleItem = firstVisibleItem;
+                currentVisibleItemCount = visibleItemCount;
+            }
+        });
 
 
         return v;
@@ -72,26 +134,36 @@ public class Lowongan extends Fragment {
 //        return "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.";
 //    }
 
-    void getAlllowongan() {
+    void getAlllowongan(int page) {
         //Creating a string request
-        StringRequest stringRequest = new StringRequest(Request.Method.GET, "http://94.177.203.179/api/job",
+        StringRequest stringRequest = new StringRequest(Request.Method.GET, "http://94.177.203.179/api/job?token=" + "\"" + token + "\"&&page=" + page,
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
                         try {
-                            JSONArray listdata = new JSONArray(response);
-                            for (int i = 0; i < listdata.length(); i++) {
-                                JSONObject object = listdata.getJSONObject(i);
-                                LowonganModel asp = new LowonganModel(object.getString("job_name"), object.getString("created_at"),object.getString("description"),object.getString("job_owner"),object.getString("phone"));
-                                //Toast.makeText(Lowongan.this.getContext(), asp.getIsi(), Toast.LENGTH_SHORT).show();
+                            JSONObject listdata = new JSONObject(response);
+                            currentpage = listdata.getInt("current_page");
+                            lastpage = listdata.getInt("last_page");
+                            banyakdata = listdata.getInt("total");
+                            JSONArray isiproduk = listdata.getJSONArray("data");
+                            for (int i = 0; i < isiproduk.length(); i++) {
+                                JSONObject object = isiproduk.getJSONObject(i);
+                                LowonganModel asp = new LowonganModel(object.getString("job_name"), object.getString("created_at"), object.getString("description"), object.getString("job_owner"), object.getString("phone"));
+//                                //Toast.makeText(Lowongan.this.getContext(), asp.getIsi(), Toast.LENGTH_SHORT).show();
                                 daftarlowongan.add(asp);
                             }
+//                            for (int i = 0; i < listdata.length(); i++) {
+//                                JSONObject object = listdata.getJSONObject(i);
+//                                LowonganModel asp = new LowonganModel(object.getString("job_name"), object.getString("created_at"), object.getString("description"), object.getString("job_owner"), object.getString("phone"));
+//                                //Toast.makeText(Lowongan.this.getContext(), asp.getIsi(), Toast.LENGTH_SHORT).show();
+//                                daftarlowongan.add(asp);
+//                            }
                             if (!daftarlowongan.isEmpty()) {
+                                hideProgressDialog();
                                 kosong.setVisibility(View.GONE);
                                 adapter = new AdpterLowongan(Lowongan.this.getContext(), daftarlowongan);
                                 listlowongan.setAdapter(adapter);
                                 adapter.notifyDataSetChanged();
-
                                 listlowongan.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                                     @Override
                                     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -141,6 +213,22 @@ public class Lowongan extends Fragment {
         RequestQueue requestQueue = Volley.newRequestQueue(this.getContext());
         requestQueue.add(stringRequest);
 
+    }
+
+    private void showProgressDialog() {
+        if (mProgressDialog == null) {
+            mProgressDialog = new ProgressDialog(Lowongan.this.getContext());
+            mProgressDialog.setMessage("Mohon tunggu, sedang mengambil data !");
+            mProgressDialog.setIndeterminate(true);
+        }
+
+        mProgressDialog.show();
+    }
+
+    private void hideProgressDialog() {
+        if (mProgressDialog != null && mProgressDialog.isShowing()) {
+            mProgressDialog.dismiss();
+        }
     }
 
 }

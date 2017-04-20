@@ -33,6 +33,7 @@ public class DetailProduk extends Fragment implements BaseSliderView.OnSliderCli
     ProdukModel produk;
     //FButton telp, sms;
     private SliderLayout mDemoSlider;
+    private String token;
 
     public DetailProduk() {
         // Required empty public constructor
@@ -50,6 +51,7 @@ public class DetailProduk extends Fragment implements BaseSliderView.OnSliderCli
         Bundle b = this.getArguments();
         if (b != null) {
             produk = b.getParcelable("Produk");
+            token = b.getString("token");
             TextView judul = (TextView) v.findViewById(R.id.textNamadetailProduk);
             TextView desc = (TextView) v.findViewById(R.id.textDescDetailProduk);
             TextView tanggal = (TextView) v.findViewById(R.id.textViewTanggalDetailProduk);

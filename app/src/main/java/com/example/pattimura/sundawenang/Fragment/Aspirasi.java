@@ -1,12 +1,14 @@
 package com.example.pattimura.sundawenang.Fragment;
 
 
+import android.app.ProgressDialog;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AbsListView;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
@@ -42,7 +44,11 @@ public class Aspirasi extends Fragment {
     AdapterAspirasi adapter;
     Fragment fragment;
     RelativeLayout lay;
+    String token;
     ListView listAspirasi;
+    int currentpage, lastpage, banyakdata, currentFirstVisibleItem, currentVisibleItemCount, currentScrollState;
+    private ProgressDialog mProgressDialog;
+    private boolean loading = false;
 
     public Aspirasi() {
         // Required empty public constructor
@@ -53,16 +59,23 @@ public class Aspirasi extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
+        currentpage = 1;
+        lastpage = 1;
         View v = inflater.inflate(R.layout.fragment_aspirasi, container, false);
         FloatingActionButton fab = (FloatingActionButton) v.findViewById(R.id.fab);
         ImageView cover = (ImageView) v.findViewById(R.id.imageView5);
         listAspirasi = (ListView) v.findViewById(R.id.listAspirasi);
-
+        Bundle b = getArguments();
+        if (b != null) {
+            token = b.getString("token");
+        }
         Picasso.with(Aspirasi.this.getContext()).load(R.drawable.aspirasi).fit().into(cover);
         listaspirasi = new ArrayList<>();
         adapter = new AdapterAspirasi(Aspirasi.this.getContext(), listaspirasi);
         lay = (RelativeLayout) v.findViewById(R.id.layoutaspirasi);
-        getdataAspirasi();
+        showProgressDialog();
+        getdataAspirasi(currentpage);
+        adapter.notifyDataSetChanged();
 
         final PullRefreshLayout layout = (PullRefreshLayout) v.findViewById(R.id.swipeRefreshLayout);
         layout.setRefreshStyle(PullRefreshLayout.STYLE_MATERIAL);
@@ -72,17 +85,49 @@ public class Aspirasi extends Fragment {
                 layout.postDelayed(new Runnable() {
                     @Override
                     public void run() {
-                        getdataAspirasi();
+                        if (currentpage != lastpage) {
+                            listaspirasi = new ArrayList<>();
+                            adapter = new AdapterAspirasi(Aspirasi.this.getContext(), listaspirasi);
+                            getdataAspirasi(currentpage);
+                        }
                         layout.setRefreshing(false);
                     }
                 }, 1000);
             }
         });
 
+        listAspirasi.setOnScrollListener(new AbsListView.OnScrollListener() {
+            @Override
+            public void onScrollStateChanged(AbsListView view, int scrollState) {
+                currentScrollState = scrollState;
+                isScrollCompleted();
+            }
+
+            private void isScrollCompleted() {
+                if (currentVisibleItemCount > 0 && currentScrollState == SCROLL_STATE_IDLE) {
+                    /*** In this way I detect if there's been a scroll which has completed ***/
+                    /*** do the work for load more date! ***/
+                    if (currentpage != lastpage) {
+                        currentpage++;
+                        getdataAspirasi(currentpage);
+                    }
+                }
+            }
+
+            @Override
+            public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
+                //Toast.makeText(Aspirasi.this.getContext(), Integer.toString(totalItemCount), Toast.LENGTH_SHORT).show();
+                currentFirstVisibleItem = firstVisibleItem;
+                currentVisibleItemCount = visibleItemCount;
+            }
+        });
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 fragment = new TambahAspirasi();
+                Bundle b = new Bundle();
+                b.putString("token", token);
+                fragment.setArguments(b);
                 FragmentTransaction ft = getFragmentManager().beginTransaction();
                 ft.replace(R.id.mainframe, fragment);
                 ft.commit();
@@ -90,6 +135,22 @@ public class Aspirasi extends Fragment {
         });
 
         return v;
+    }
+
+    private void showProgressDialog() {
+        if (mProgressDialog == null) {
+            mProgressDialog = new ProgressDialog(Aspirasi.this.getContext());
+            mProgressDialog.setMessage("Mohon tunggu, sedang mengambil data !");
+            mProgressDialog.setIndeterminate(true);
+        }
+
+        mProgressDialog.show();
+    }
+
+    private void hideProgressDialog() {
+        if (mProgressDialog != null && mProgressDialog.isShowing()) {
+            mProgressDialog.dismiss();
+        }
     }
 
 //    public void getdataAspirasi() {
@@ -102,25 +163,37 @@ public class Aspirasi extends Fragment {
 //        }
 //    }
 
-    public void getdataAspirasi() {
+    public void getdataAspirasi(int page) {
         //Creating a string request
-        StringRequest stringRequest = new StringRequest(Request.Method.GET, "http://94.177.203.179/api/aspiration",
+        StringRequest stringRequest = new StringRequest(Request.Method.GET, "http://94.177.203.179/api/aspiration?token=\"" + token + "\"&&page=" + page,
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
                         try {
-                            JSONArray listdata = new JSONArray(response);
-                            for (int i = 0; i < listdata.length(); i++) {
-                                JSONObject object = listdata.getJSONObject(i);
+                            JSONObject listdata = new JSONObject(response);
+                            currentpage = listdata.getInt("current_page");
+                            lastpage = listdata.getInt("last_page");
+                            banyakdata = listdata.getInt("total");
+                            JSONArray isiaspirasi = listdata.getJSONArray("data");
+                            for (int i = 0; i < isiaspirasi.length(); i++) {
+                                JSONObject object = isiaspirasi.getJSONObject(i);
                                 AspirasiModel asp = new AspirasiModel(object.getString("aspiration"), object.getString("name"), "http://94.177.203.179/storage/" + object.getString("photo_id"), object.getString("rt"), object.getString("rw"));
-                                //Toast.makeText(Aspirasi.this.getContext(), asp.getIsi(), Toast.LENGTH_SHORT).show();
                                 listaspirasi.add(asp);
                             }
+//                            for (int i = 0; i < listdata.length(); i++) {
+//                                JSONObject object = listdata.getJSONObject(i);
+//                                AspirasiModel asp = new AspirasiModel(object.getString("aspiration"), object.getString("name"), "http://94.177.203.179/storage/" + object.getString("photo_id"), object.getString("rt"), object.getString("rw"));
+//                                //Toast.makeText(Aspirasi.this.getContext(), asp.getIsi(), Toast.LENGTH_SHORT).show();
+//                                listaspirasi.add(asp);
+//                            }
                             if (!listaspirasi.isEmpty()) {
+                                hideProgressDialog();
                                 lay.setVisibility(View.GONE);
                                 listAspirasi.setAdapter(adapter);
+                                loading = false;
                                 adapter.notifyDataSetChanged();
                             } else {
+                                hideProgressDialog();
                                 lay.setVisibility(View.VISIBLE);
                             }
                         } catch (Exception e) {
@@ -134,7 +207,7 @@ public class Aspirasi extends Fragment {
                     public void onErrorResponse(VolleyError error) {
                         //You can handle error here if you want
                         error.printStackTrace();
-                        Toast.makeText(Aspirasi.this.getContext(), "erroring: " + error.getMessage(), Toast.LENGTH_SHORT).show();
+                        //Toast.makeText(Aspirasi.this.getContext(), "erroring: " + error.getMessage(), Toast.LENGTH_SHORT).show();
                     }
                 }) {
             @Override

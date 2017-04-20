@@ -20,6 +20,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.volley.AuthFailureError;
+import com.android.volley.NetworkResponse;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
@@ -27,6 +28,9 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.example.pattimura.sundawenang.R;
+import com.example.pattimura.sundawenang.VolleyHelper.AppHelper;
+import com.example.pattimura.sundawenang.VolleyHelper.VolleyMultipartRequest;
+import com.example.pattimura.sundawenang.VolleyHelper.VolleySingleton;
 import com.rengwuxian.materialedittext.MaterialEditText;
 import com.squareup.picasso.Picasso;
 
@@ -43,6 +47,7 @@ import static android.app.Activity.RESULT_OK;
 public class Pengaduan extends Fragment implements View.OnClickListener {
     private Uri pajakFileUri = null;
     private Uri ktpFileUri = null;
+    private File filesktp, filespajak;
     private String status = "";
     private ImageView ktp, pajak;
     private String namafile;
@@ -89,7 +94,7 @@ public class Pengaduan extends Fragment implements View.OnClickListener {
             photoBuilder();
         } else if (v == submit) {
             if (!isiPengaduan.getText().toString().equals("") && ktpFileUri != null && pajakFileUri != null) {
-                KirimData(isiPengaduan.getText().toString());
+                kirimData(isiPengaduan.getText().toString(), ktpFileUri, pajakFileUri);
                 Toast.makeText(Pengaduan.this.getContext(), "Pengaduan berhasil ditambahkan !", Toast.LENGTH_SHORT).show();
                 clearData();
             } else {
@@ -108,43 +113,50 @@ public class Pengaduan extends Fragment implements View.OnClickListener {
         txtPajak.setText("Upload Foto Pajak");
     }
 
-    void KirimData(final String isi) {
-        //Creating a string request
-        StringRequest stringRequest = new StringRequest(Request.Method.POST, "http://94.177.203.179/api/report",
-                new Response.Listener<String>() {
-                    @Override
-                    public void onResponse(String response) {
-                        //tempat response di dapatkan
-                    }
-                },
-                new Response.ErrorListener() {
-                    @Override
-                    public void onErrorResponse(VolleyError error) {
-                        //You can handle error here if you want
-                        error.printStackTrace();
-                        Toast.makeText(Pengaduan.this.getContext(), "erroring: " + error.getMessage(), Toast.LENGTH_SHORT).show();
-                    }
-                }) {
+    private void kirimData(final String isi, final Uri ktpuri, final Uri pajakuri) {
+        //final ProgressDialog dialog = ProgressDialog.show(TambahAspirasi.this.getContext(), "", "Loading. Please wait...", true);
+        VolleyMultipartRequest multipartRequest = new VolleyMultipartRequest(Request.Method.POST, "http://94.177.203.179/api/report", new Response.Listener<NetworkResponse>() {
             @Override
-            protected Map<String, String> getParams() throws AuthFailureError {
-                Map<String, String> params = new HashMap<>();
-                try {
-                    //Adding parameters to request
-                    params.put("title", "judul report");
-                    params.put("report", isi);
-                    //returning parameter
-                    return params;
-                } catch (Exception e) {
-                    Toast.makeText(Pengaduan.this.getContext(), e.getMessage(), Toast.LENGTH_SHORT).show();
-                    return params;
-                }
+            public void onResponse(NetworkResponse response) {
+                String resultResponse = new String(response.data);
+//                try {
+//
+//                } catch (JSONException e) {
+//                    e.printStackTrace();
+//                }
             }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                error.printStackTrace();
+//
+                //dialog.dismiss();
+
+            }
+        }) {
+            @Override
+            protected Map<String, String> getParams() {
+                Map<String, String> params = new HashMap<>();
+                params.put("title", "judul report");
+                params.put("report", isi);
+                return params;
+            }
+
+            @Override
+            protected Map<String, DataPart> getByteData() {
+                Map<String, DataPart> params = new HashMap<>();
+                // file name could found file base or direct access from real path
+                // for now just get bitmap data from ImageView
+                params.put("photo_id", new DataPart(ktpuri.getLastPathSegment(), AppHelper.getFileDataFromDrawable(Pengaduan.this.getContext(), ktp.getDrawable()), "image/jpeg"));
+                params.put("photo_tax", new DataPart(pajakuri.getLastPathSegment(), AppHelper.getFileDataFromDrawable(Pengaduan.this.getContext(), pajak.getDrawable()), "image/jpeg"));
+                return params;
+            }
+
         };
 
-        //Adding the string request to the queue
-        RequestQueue requestQueue = Volley.newRequestQueue(this.getContext());
-        requestQueue.add(stringRequest);
+        VolleySingleton.getInstance(Pengaduan.this.getContext()).addToRequestQueue(multipartRequest);
     }
+
 
     private void photoBuilder() {
         AlertDialog.Builder builder = new AlertDialog.Builder(Pengaduan.this.getContext());
@@ -172,10 +184,12 @@ public class Pengaduan extends Fragment implements View.OnClickListener {
         // Choose file storage location
         File file = new File(Environment.getExternalStorageDirectory(), UUID.randomUUID().toString() + ".jpg");
         if (status.equals("ktp")) {
+            filesktp = file;
             ktpFileUri = Uri.fromFile(file);
             takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, ktpFileUri);
             namafile = ktpFileUri.getLastPathSegment();
         } else if (status.equals("pajak")) {
+            filespajak = file;
             pajakFileUri = Uri.fromFile(file);
             takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, pajakFileUri);
             namafile = pajakFileUri.getLastPathSegment();
@@ -196,10 +210,10 @@ public class Pengaduan extends Fragment implements View.OnClickListener {
             if (resultCode == RESULT_OK) {
                 if (status.equals("ktp")) {
                     txtKtp.setText(namafile);
-                    Picasso.with(Pengaduan.this.getContext()).load(R.drawable.done).fit().into(ktp);
+                    Picasso.with(Pengaduan.this.getContext()).load(filesktp).fit().into(ktp);
                 } else if (status.equals("pajak")) {
                     txtPajak.setText(namafile);
-                    Picasso.with(Pengaduan.this.getContext()).load(R.drawable.done).fit().into(pajak);
+                    Picasso.with(Pengaduan.this.getContext()).load(filespajak).fit().into(pajak);
                 }
             } else {
                 Toast.makeText(Pengaduan.this.getContext(), "Photo gagal diambil, tolong ulangi lagi !", Toast.LENGTH_SHORT).show();
@@ -215,13 +229,15 @@ public class Pengaduan extends Fragment implements View.OnClickListener {
                 cursor.close();
                 File file = new File(filePath);
                 if (status.equals("ktp")) {
+                    filesktp = file;
                     ktpFileUri = Uri.fromFile(file);
                     txtKtp.setText(ktpFileUri.getLastPathSegment());
-                    Picasso.with(Pengaduan.this.getContext()).load(R.drawable.done).fit().into(ktp);
+                    Picasso.with(Pengaduan.this.getContext()).load(filesktp).fit().into(ktp);
                 } else if (status.equals("pajak")) {
+                    filespajak = file;
                     pajakFileUri = Uri.fromFile(file);
                     txtPajak.setText(pajakFileUri.getLastPathSegment());
-                    Picasso.with(Pengaduan.this.getContext()).load(R.drawable.done).fit().into(pajak);
+                    Picasso.with(Pengaduan.this.getContext()).load(filespajak).fit().into(pajak);
                 }
             } else {
                 Toast.makeText(Pengaduan.this.getContext(), "Photo gagal diambil, tolong ulangi lagi !", Toast.LENGTH_SHORT).show();

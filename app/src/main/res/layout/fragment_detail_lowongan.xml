@@ -56,13 +56,81 @@
             android:layout_below="@id/imageView6"
             android:layout_margin="13dp">
 
-            <TextView
-                android:id="@+id/textDescDetailLowongan"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="TextView"
-                android:textColor="@android:color/black"
-                android:textSize="18dp" />
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <TextView
+                    android:id="@+id/textDescDetailLowongan"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="TextView"
+                    android:textColor="@android:color/black"
+                    android:textSize="18dp" />
+
+                <LinearLayout
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/textDescDetailLowongan"
+                    android:layout_marginTop="8dp"
+                    android:orientation="horizontal">
+
+                    <com.andexert.library.RippleView
+                        android:id="@+id/pesan_buttonlowongan"
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        app:rv_color="#A5D6A7">
+
+                        <FrameLayout
+                            style="?android:attr/buttonStyle"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:background="#4CAF50">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center"
+                                android:drawableLeft="@drawable/pesan"
+                                android:gravity="center"
+                                android:text="Kirim Pesan CP"
+                                android:textColor="@android:color/white"
+                                android:textSize="15dp" />
+                        </FrameLayout>
+
+
+                    </com.andexert.library.RippleView>
+
+                    <com.andexert.library.RippleView
+                        android:id="@+id/call_buttonlowongan"
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        app:rv_color="#A5D6A7">
+
+                        <FrameLayout
+                            style="?android:attr/buttonStyle"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:background="#388E3C">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center"
+                                android:drawableLeft="@drawable/call"
+                                android:gravity="center"
+                                android:text="Telepon CP"
+                                android:textColor="@android:color/white"
+                                android:textSize="15dp" />
+                        </FrameLayout>
+                    </com.andexert.library.RippleView>
+
+                </LinearLayout>
+
+            </RelativeLayout>
+
 
         </ScrollView>
 

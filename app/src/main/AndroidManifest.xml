@@ -30,7 +30,6 @@
             android:name=".LandingPage"
             android:label=""
             android:theme="@style/AppTheme.NoActionBar" />
-        <activity android:name=".HalamanDaftar"></activity>
     </application>
 
 </manifest>

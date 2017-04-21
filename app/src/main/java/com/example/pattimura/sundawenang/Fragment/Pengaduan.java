@@ -6,6 +6,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Bitmap;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
@@ -50,10 +51,11 @@ public class Pengaduan extends Fragment implements View.OnClickListener {
     private File filesktp, filespajak;
     private String status = "";
     private ImageView ktp, pajak;
-    private String namafile;
+    private String namafile, token;
     private Button submit;
     private TextView txtKtp, txtPajak;
     private MaterialEditText isiPengaduan;
+    private Drawable picktp, picpajak;
 
 
     public Pengaduan() {
@@ -73,6 +75,11 @@ public class Pengaduan extends Fragment implements View.OnClickListener {
         ktp = (ImageView) v.findViewById(R.id.imageViewKTPPengaduan);
         pajak = (ImageView) v.findViewById(R.id.imageViewPajakPengaduan);
         submit = (Button) v.findViewById(R.id.buttonPengaduan);
+
+        Bundle b = getArguments();
+        if (b != null) {
+            token = b.getString("token");
+        }
 
         Picasso.with(this.getContext()).load(R.drawable.buttonuploadfotobiru).fit().into(ktp);
         Picasso.with(this.getContext()).load(R.drawable.buttonuploadfotoijo).fit().into(pajak);
@@ -115,7 +122,7 @@ public class Pengaduan extends Fragment implements View.OnClickListener {
 
     private void kirimData(final String isi, final Uri ktpuri, final Uri pajakuri) {
         //final ProgressDialog dialog = ProgressDialog.show(TambahAspirasi.this.getContext(), "", "Loading. Please wait...", true);
-        VolleyMultipartRequest multipartRequest = new VolleyMultipartRequest(Request.Method.POST, "http://94.177.203.179/api/report", new Response.Listener<NetworkResponse>() {
+        VolleyMultipartRequest multipartRequest = new VolleyMultipartRequest(Request.Method.POST, "http://94.177.203.179/api/laporan?token=" + "\"" + token + "\"", new Response.Listener<NetworkResponse>() {
             @Override
             public void onResponse(NetworkResponse response) {
                 String resultResponse = new String(response.data);
@@ -147,8 +154,8 @@ public class Pengaduan extends Fragment implements View.OnClickListener {
                 Map<String, DataPart> params = new HashMap<>();
                 // file name could found file base or direct access from real path
                 // for now just get bitmap data from ImageView
-                params.put("photo_id", new DataPart(ktpuri.getLastPathSegment(), AppHelper.getFileDataFromDrawable(Pengaduan.this.getContext(), ktp.getDrawable()), "image/jpeg"));
-                params.put("photo_tax", new DataPart(pajakuri.getLastPathSegment(), AppHelper.getFileDataFromDrawable(Pengaduan.this.getContext(), pajak.getDrawable()), "image/jpeg"));
+                params.put("photo_id", new DataPart(ktpuri.getLastPathSegment(), AppHelper.getFileDataFromDrawable(Pengaduan.this.getContext(), picktp), "image/jpeg"));
+                params.put("photo_tax", new DataPart(pajakuri.getLastPathSegment(), AppHelper.getFileDataFromDrawable(Pengaduan.this.getContext(), picpajak), "image/jpeg"));
                 return params;
             }
 
@@ -210,9 +217,11 @@ public class Pengaduan extends Fragment implements View.OnClickListener {
             if (resultCode == RESULT_OK) {
                 if (status.equals("ktp")) {
                     txtKtp.setText(namafile);
+                    picktp = Drawable.createFromPath(filesktp.getPath());
                     Picasso.with(Pengaduan.this.getContext()).load(filesktp).fit().into(ktp);
                 } else if (status.equals("pajak")) {
                     txtPajak.setText(namafile);
+                    picpajak = Drawable.createFromPath(filespajak.getPath());
                     Picasso.with(Pengaduan.this.getContext()).load(filespajak).fit().into(pajak);
                 }
             } else {
@@ -231,11 +240,13 @@ public class Pengaduan extends Fragment implements View.OnClickListener {
                 if (status.equals("ktp")) {
                     filesktp = file;
                     ktpFileUri = Uri.fromFile(file);
+                    picktp = Drawable.createFromPath(filesktp.getPath());
                     txtKtp.setText(ktpFileUri.getLastPathSegment());
                     Picasso.with(Pengaduan.this.getContext()).load(filesktp).fit().into(ktp);
                 } else if (status.equals("pajak")) {
                     filespajak = file;
                     pajakFileUri = Uri.fromFile(file);
+                    picpajak = Drawable.createFromPath(filespajak.getPath());
                     txtPajak.setText(pajakFileUri.getLastPathSegment());
                     Picasso.with(Pengaduan.this.getContext()).load(filespajak).fit().into(pajak);
                 }

@@ -64,6 +64,7 @@ public class DetailProduk extends Fragment implements BaseSliderView.OnSliderCli
             HashMap<String, String> file_maps = new HashMap<String, String>();
             if (produk.cekDaftarGambar()) {
                 file_maps.put("Coming soon !", "");
+                Toast.makeText(DetailProduk.this.getContext(), Boolean.toString(produk.cekDaftarGambar()), Toast.LENGTH_SHORT).show();
             }
             for (GambarProduk g : produk.getDaftargambar()) {
                 file_maps.put(g.getNama(), g.getUrl());

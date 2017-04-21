@@ -1,6 +1,8 @@
 package com.example.pattimura.sundawenang.Fragment;
 
 
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -8,6 +10,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.andexert.library.RippleView;
 import com.daimajia.slider.library.Animations.DescriptionAnimation;
 import com.daimajia.slider.library.SliderLayout;
 import com.daimajia.slider.library.SliderTypes.BaseSliderView;
@@ -45,6 +48,8 @@ public class DetailLowongan extends Fragment implements BaseSliderView.OnSliderC
             TextView judul = (TextView) v.findViewById(R.id.textNamadetaillowongan);
             TextView desc = (TextView) v.findViewById(R.id.textDescDetailLowongan);
             TextView tanggal = (TextView) v.findViewById(R.id.textViewTanggalDetaillowongan);
+            RippleView telp = (RippleView) v.findViewById(R.id.call_buttonlowongan);
+            RippleView sms = (RippleView) v.findViewById(R.id.pesan_buttonlowongan);
 
             judul.setText(lm.getJudul());
             desc.setText(lm.getDeskripsi());
@@ -80,6 +85,24 @@ public class DetailLowongan extends Fragment implements BaseSliderView.OnSliderC
                     }
                 });
             }
+            telp.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent callintent = new Intent(Intent.ACTION_CALL);
+                    callintent.setData(Uri.parse("tel:" + lm.getNotel()));
+                    startActivity(callintent);
+                }
+            });
+
+            sms.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent smsIntent = new Intent(Intent.ACTION_VIEW);
+                    smsIntent.setType("vnd.android-dir/mms-sms");
+                    smsIntent.putExtra("address", lm.getNotel());
+                    startActivity(smsIntent);
+                }
+            });
         }
 
         return v;

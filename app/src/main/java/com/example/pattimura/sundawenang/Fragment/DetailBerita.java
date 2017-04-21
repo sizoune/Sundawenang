@@ -35,27 +35,29 @@ public class DetailBerita extends Fragment {
         // Inflate the layout for this fragment
         View v = inflater.inflate(R.layout.fragment_detail_berita, container, false);
 
-        ImageView cover = (ImageView) v.findViewById(R.id.imageCoverberita);
-        TextView judul = (TextView) v.findViewById(R.id.txtJuduldetailBerita);
-        TextView tanggal = (TextView) v.findViewById(R.id.txtTanggaldetailberita);
-        TextView kategori = (TextView) v.findViewById(R.id.txtKategoridetailberita);
+//        ImageView cover = (ImageView) v.findViewById(R.id.imageCoverberita);
+//        TextView judul = (TextView) v.findViewById(R.id.txtJuduldetailBerita);
+//        TextView tanggal = (TextView) v.findViewById(R.id.txtTanggaldetailberita);
+//        TextView kategori = (TextView) v.findViewById(R.id.txtKategoridetailberita);
         deskripsi = (WebView) v.findViewById(R.id.video);
 
         Bundle b = this.getArguments();
         if (b != null) {
             BeritaModel berita = b.getParcelable("Berita");
-            if (!berita.cekDaftarGambar()) {
-                Picasso.with(this.getContext()).load(berita.getGambarke(0).getUrl()).fit().into(cover);
-            } else {
-                Picasso.with(this.getContext()).load(R.drawable.imagedefault).fit().into(cover);
-            }
+//            if (!berita.cekDaftarGambar()) {
+//                Picasso.with(this.getContext()).load(berita.getGambarke(0).getUrl()).fit().into(cover);
+//            } else {
+//                Picasso.with(this.getContext()).load(R.drawable.imagedefault).fit().into(cover);
+//            }
 
-            judul.setText(berita.getJudul());
-            tanggal.setText(berita.getTanggal());
-            kategori.setText(berita.getKategori());
-            deskripsi.setWebViewClient(new WebViewClient());
+//            judul.setText(berita.getJudul());
+//            tanggal.setText(berita.getTanggal());
+//            kategori.setText(berita.getKategori());
+            deskripsi.setWebViewClient(new MyBrowser());
             deskripsi.getSettings().setJavaScriptEnabled(true);
-            deskripsi.loadData(berita.getIsiBerita(), "text/html", "UTF-8");
+            deskripsi.loadUrl(berita.getIsiBerita());
+
+            //deskripsi.loadData(berita.getIsiBerita(), "text/html", "UTF-8");
 //            if (!berita.getUrlvideo().equals("")) {
 //                video.setVisibility(View.VISIBLE);
 //                video.setWebViewClient(new WebViewClient() {
@@ -72,6 +74,13 @@ public class DetailBerita extends Fragment {
 
 
         return v;
+    }
+
+    private class MyBrowser extends WebViewClient {
+        @Override
+        public boolean shouldOverrideUrlLoading(WebView view, String url) {
+            return false;
+        }
     }
 
     @Override

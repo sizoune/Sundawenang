@@ -99,7 +99,7 @@ public class Berita extends Fragment {
 //        daftarberita.get(0).setUrlvideo("https://www.youtube.com/embed/dxkXpKnS3k0");
 //        daftarberita.get(0).addGambar("Acara Syukuran", "http://sundawenang-parungkuda.desa.id/wp-content/uploads/sites/391/2017/02/LOGO-RPJM-300x75.png");
 //        daftarberita.get(1).addGambar("Mobil Ambulan", "http://sundawenang-parungkuda.desa.id/wp-content/uploads/sites/391/2017/02/LOGO-RPJM-300x75.png");
-        StringRequest stringRequest = new StringRequest(Request.Method.GET, "http://sundawenang-parungkuda.16mb.com/wp-json/wp/v2/posts",
+        StringRequest stringRequest = new StringRequest(Request.Method.GET, "http://sundawenang-parungkuda.16mb.com/wp-json/wp/v2/posts?&_embed=true",
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
@@ -109,12 +109,28 @@ public class Berita extends Fragment {
                                 JSONObject data = listdata.getJSONObject(i);
                                 JSONObject judulO = data.getJSONObject("title");
                                 JSONObject isiO = data.getJSONObject("guid");
-                                String judul = judulO.getString("rendered");
-                                String desc = isiO.getString("rendered");
-                                String kategori = data.getString("status");
-                                String tanggal = data.getString("date");
-                                BeritaModel bm = new BeritaModel(desc, judul, tanggal, kategori);
-                                daftarberita.add(bm);
+                                JSONObject gmb = data.getJSONObject("_embedded");
+                                String gambar = "";
+                                if (gmb.has("wp:featuredmedia")) {
+                                    JSONArray media = gmb.getJSONArray("wp:featuredmedia");
+                                    JSONObject iss = media.getJSONObject(0);
+                                    gambar = iss.getString("source_url");
+                                    String judul = judulO.getString("rendered");
+                                    String desc = isiO.getString("rendered");
+                                    String kategori = data.getString("status");
+                                    String tanggal = data.getString("date");
+                                    BeritaModel bm = new BeritaModel(desc, judul, tanggal, kategori);
+                                    bm.addGambar("berita", gambar);
+                                    daftarberita.add(bm);
+                                } else {
+                                    String judul = judulO.getString("rendered");
+                                    String desc = isiO.getString("rendered");
+                                    String kategori = data.getString("status");
+                                    String tanggal = data.getString("date");
+                                    BeritaModel bm = new BeritaModel(desc, judul, tanggal, kategori);
+                                    daftarberita.add(bm);
+                                }
+
                             }
                             if (!daftarberita.isEmpty()) {
                                 hideProgressDialog();

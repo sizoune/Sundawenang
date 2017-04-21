@@ -1,6 +1,8 @@
 package com.example.pattimura.sundawenang.Fragment;
 
 
+import android.app.ProgressDialog;
+import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -11,6 +13,7 @@ import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.example.pattimura.sundawenang.Model.BeritaModel;
@@ -23,6 +26,7 @@ import com.squareup.picasso.Picasso;
 public class DetailBerita extends Fragment {
     WebView deskripsi;
     int lebar;
+    ProgressDialog mProgressDialog;
 
     public DetailBerita() {
         // Required empty public constructor
@@ -76,13 +80,6 @@ public class DetailBerita extends Fragment {
         return v;
     }
 
-    private class MyBrowser extends WebViewClient {
-        @Override
-        public boolean shouldOverrideUrlLoading(WebView view, String url) {
-            return false;
-        }
-    }
-
     @Override
     public void onResume() {
         deskripsi.onResume();
@@ -93,5 +90,44 @@ public class DetailBerita extends Fragment {
     public void onStop() {
         deskripsi.onPause();
         super.onStop();
+    }
+
+    private void showProgressDialog() {
+        if (mProgressDialog == null) {
+            mProgressDialog = new ProgressDialog(DetailBerita.this.getContext());
+            mProgressDialog.setMessage("Mohon tunggu, sedang mengambil data !");
+            mProgressDialog.setIndeterminate(true);
+        }
+
+        mProgressDialog.show();
+    }
+
+    private void hideProgressDialog() {
+        if (mProgressDialog != null && mProgressDialog.isShowing()) {
+            mProgressDialog.dismiss();
+        }
+    }
+
+    private class MyBrowser extends WebViewClient {
+        private ProgressBar progressBar;
+
+        @Override
+        public void onPageStarted(WebView view, String url, Bitmap favicon) {
+            super.onPageStarted(view, url, favicon);
+            showProgressDialog();
+        }
+
+        @Override
+        public boolean shouldOverrideUrlLoading(WebView view, String url) {
+            view.loadUrl(url);
+            return true;
+        }
+
+        @Override
+        public void onPageFinished(WebView view, String url) {
+            // TODO Auto-generated method stub
+            super.onPageFinished(view, url);
+            hideProgressDialog();
+        }
     }
 }

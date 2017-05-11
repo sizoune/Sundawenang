@@ -5,6 +5,7 @@ import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -52,11 +53,13 @@ import java.util.Map;
 import java.util.UUID;
 
 import static android.app.Activity.RESULT_OK;
+import static android.content.Context.MODE_PRIVATE;
 
 /**
  * A simple {@link Fragment} subclass.
  */
 public class TambahAspirasi extends Fragment implements View.OnClickListener {
+    public static final String MY_PREFS_NAME = "MyPrefsFile";
     private ProgressDialog mProgressDialog;
     private MaterialEditText isiAspirasi, nama, rt, rw;
     private TextView txtKtp;
@@ -88,8 +91,8 @@ public class TambahAspirasi extends Fragment implements View.OnClickListener {
         txtKtp = (TextView) v.findViewById(R.id.textViewKTPTambahaspirasi);
         submit = (Button) v.findViewById(R.id.buttonKirimAspirasi);
 
-        Bundle b = getArguments();
-        token = b.getString("token");
+        SharedPreferences prefs = TambahAspirasi.this.getActivity().getSharedPreferences(MY_PREFS_NAME, MODE_PRIVATE);
+        token = prefs.getString("token", "not found");
         //Toast.makeText(TambahAspirasi.this.getContext(), token, Toast.LENGTH_SHORT).show();
         Picasso.with(this.getContext()).load(R.drawable.buttonuploadfotobiru).fit().into(fotoktp);
 

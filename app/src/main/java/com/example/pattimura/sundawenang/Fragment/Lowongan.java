@@ -2,6 +2,7 @@ package com.example.pattimura.sundawenang.Fragment;
 
 
 import android.app.ProgressDialog;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
@@ -35,10 +36,13 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
+import static android.content.Context.MODE_PRIVATE;
+
 /**
  * A simple {@link Fragment} subclass.
  */
 public class Lowongan extends Fragment {
+    public static final String MY_PREFS_NAME = "MyPrefsFile";
     AdpterLowongan adapter;
     ArrayList<LowonganModel> daftarlowongan = new ArrayList<>();
     RelativeLayout kosong;
@@ -61,10 +65,8 @@ public class Lowongan extends Fragment {
         currentpage = 1;
         lastpage = 1;
 
-        Bundle b = getArguments();
-        if (b != null) {
-            token = b.getString("token");
-        }
+        SharedPreferences prefs = Lowongan.this.getActivity().getSharedPreferences(MY_PREFS_NAME, MODE_PRIVATE);
+        token = prefs.getString("token", "not found");
 
         listlowongan = (ListView) v.findViewById(R.id.listLowongan);
         kosong = (RelativeLayout) v.findViewById(R.id.layoutlowongan);

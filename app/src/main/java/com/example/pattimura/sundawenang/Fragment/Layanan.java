@@ -4,6 +4,7 @@ package com.example.pattimura.sundawenang.Fragment;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -43,14 +44,17 @@ import java.util.Map;
 import java.util.UUID;
 
 import fr.ganfra.materialspinner.MaterialSpinner;
+import me.drakeet.materialdialog.MaterialDialog;
 
 import static android.app.Activity.RESULT_OK;
+import static android.content.Context.MODE_PRIVATE;
 import static com.example.pattimura.sundawenang.R.drawable.layanan;
 
 /**
  * A simple {@link Fragment} subclass.
  */
 public class Layanan extends Fragment implements View.OnClickListener {
+    public static final String MY_PREFS_NAME = "MyPrefsFile";
     private MaterialSpinner spinner;
     private Uri pajakFileUri = null;
     private Uri ktpFileUri = null;
@@ -61,10 +65,10 @@ public class Layanan extends Fragment implements View.OnClickListener {
     private ImageView ktp, pajak, lainnya;
     private Button submit;
     private TextView txtKtp, txtPajak, txtLainnya;
-    private MaterialEditText nama, notel;
+    private MaterialEditText nama, notel, njop;
     private String token;
     private Drawable picktp, picpajak, piclain;
-
+    private MaterialDialog mMaterialDialog;
 
     public Layanan() {
         // Required empty public constructor
@@ -86,14 +90,15 @@ public class Layanan extends Fragment implements View.OnClickListener {
         txtLainnya = (TextView) v.findViewById(R.id.txtLainnya);
         nama = (MaterialEditText) v.findViewById(R.id.txtNama);
         notel = (MaterialEditText) v.findViewById(R.id.txtTelp);
+        njop = (MaterialEditText) v.findViewById(R.id.txtNJOP);
         submit = (Button) v.findViewById(R.id.buttonLayanan);
 
         Picasso.with(this.getContext()).load(R.drawable.buttonuploadfotobiru).fit().into(ktp);
         Picasso.with(this.getContext()).load(R.drawable.buttonuploadfotoijo).fit().into(pajak);
         Picasso.with(this.getContext()).load(R.drawable.buttonuploalainnya).fit().into(lainnya);
 
-        Bundle b = getArguments();
-        token = b.getString("token");
+        SharedPreferences prefs = Layanan.this.getActivity().getSharedPreferences(MY_PREFS_NAME, MODE_PRIVATE);
+        token = prefs.getString("token", "not found");
 
         String[] layanan = {"Pembuatan E-KTP", "Pembuatan Kartu Keluarga", "Layanan Posyandu"};
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(Layanan.this.getContext(), android.R.layout.simple_spinner_item, layanan);
@@ -121,9 +126,20 @@ public class Layanan extends Fragment implements View.OnClickListener {
             status = "lainnya";
             photoBuilder();
         } else if (v == submit) {
-            if (!nama.getText().toString().equals("") && ktpFileUri != null && pajakFileUri != null && !notel.getText().toString().equals("") && spinner.getSelectedItemPosition() != 0) {
-                kirimData(nama.getText().toString(), spinner.getSelectedItem().toString(), notel.getText().toString(), ktpFileUri, pajakFileUri, lainFileUri);
-                Toast.makeText(Layanan.this.getContext(), "Layanan berhasil ditambahkan !", Toast.LENGTH_SHORT).show();
+            if (!nama.getText().toString().equals("") && ktpFileUri != null && pajakFileUri != null && !notel.getText().toString().equals("") && spinner.getSelectedItemPosition() != 0 && !njop.getText().toString().equals("")) {
+                kirimData(nama.getText().toString(), spinner.getSelectedItem().toString(), notel.getText().toString(), ktpFileUri, pajakFileUri, lainFileUri, njop.getText().toString());
+                View vi = View.inflate(getContext(), R.layout.layoutdialog, null);
+                mMaterialDialog = new MaterialDialog(Layanan.this.getContext())
+                        .setTitle("Tenant Changed !")
+                        .setView(vi)
+                        //.setMessage("Tenant name : " + getArguments().getString("nama") + "\nDescription : " + getArguments().getString("desc") + "\nStatus : " + getArguments().getString("status"))
+                        .setPositiveButton("OK", new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                mMaterialDialog.dismiss();
+                            }
+                        });
+                mMaterialDialog.show();
                 clearData();
 
             } else {
@@ -136,6 +152,8 @@ public class Layanan extends Fragment implements View.OnClickListener {
     void clearData() {
         spinner.setSelection(0);
         nama.setText("");
+        notel.setText("");
+        njop.setText("");
         ktpFileUri = null;
         pajakFileUri = null;
         Picasso.with(this.getContext()).load(R.drawable.buttonuploadfotobiru).fit().into(ktp);
@@ -147,7 +165,7 @@ public class Layanan extends Fragment implements View.OnClickListener {
 
     }
 
-    private void kirimData(final String nama, final String tipe, final String pone, final Uri ktpuri, final Uri pajakuri, final Uri lainnyauri) {
+    private void kirimData(final String nama, final String tipe, final String pone, final Uri ktpuri, final Uri pajakuri, final Uri lainnyauri, final String njop) {
         //final ProgressDialog dialog = ProgressDialog.show(TambahAspirasi.this.getContext(), "", "Loading. Please wait...", true);
         VolleyMultipartRequest multipartRequest = new VolleyMultipartRequest(Request.Method.POST, "http://94.177.203.179/api/service?token=" + "\"" + token + "\"", new Response.Listener<NetworkResponse>() {
             @Override
@@ -174,6 +192,7 @@ public class Layanan extends Fragment implements View.OnClickListener {
                 params.put("name", nama);
                 params.put("type_service", tipe);
                 params.put("phone", pone);
+                params.put("njop", njop);
                 return params;
             }
 

@@ -4,6 +4,7 @@ package com.example.pattimura.sundawenang.Fragment;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
@@ -41,11 +42,13 @@ import java.util.Map;
 import java.util.UUID;
 
 import static android.app.Activity.RESULT_OK;
+import static android.content.Context.MODE_PRIVATE;
 
 /**
  * A simple {@link Fragment} subclass.
  */
 public class Pengaduan extends Fragment implements View.OnClickListener {
+    public static final String MY_PREFS_NAME = "MyPrefsFile";
     private Uri pajakFileUri = null;
     private Uri ktpFileUri = null;
     private File filesktp, filespajak;
@@ -56,7 +59,6 @@ public class Pengaduan extends Fragment implements View.OnClickListener {
     private TextView txtKtp, txtPajak;
     private MaterialEditText isiPengaduan;
     private Drawable picktp, picpajak;
-
 
     public Pengaduan() {
         // Required empty public constructor
@@ -76,10 +78,8 @@ public class Pengaduan extends Fragment implements View.OnClickListener {
         pajak = (ImageView) v.findViewById(R.id.imageViewPajakPengaduan);
         submit = (Button) v.findViewById(R.id.buttonPengaduan);
 
-        Bundle b = getArguments();
-        if (b != null) {
-            token = b.getString("token");
-        }
+        SharedPreferences prefs = Pengaduan.this.getActivity().getSharedPreferences(MY_PREFS_NAME, MODE_PRIVATE);
+        token = prefs.getString("token", "not found");
 
         Picasso.with(this.getContext()).load(R.drawable.buttonuploadfotobiru).fit().into(ktp);
         Picasso.with(this.getContext()).load(R.drawable.buttonuploadfotoijo).fit().into(pajak);

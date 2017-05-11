@@ -7,110 +7,117 @@
     tools:context="com.example.pattimura.sundawenang.Fragment.Pengaduan">
 
     <!-- TODO: Update blank fragment layout -->
-    <RelativeLayout
+    <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <LinearLayout
-            android:id="@+id/border"
+        <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="200dp"
-            android:layout_margin="12dp">
+            android:layout_height="match_parent">
 
-            <com.rengwuxian.materialedittext.MaterialEditText
-                android:id="@+id/txtisiPengaduan"
+            <LinearLayout
+                android:id="@+id/border"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:gravity="top|left"
-                android:hint="Apa keluhan anda ?"
-                android:inputType="textMultiLine"
-                android:lines="11"
-                android:maxLines="12"
-                android:minLines="10"
-                android:scrollbars="vertical"
-                android:textSize="15dp"
-                app:met_baseColor="@android:color/black"
-                app:met_floatingLabel="normal"
-                app:met_floatingLabelTextColor="@android:color/black"
-                app:met_primaryColor="@android:color/black" />
-        </LinearLayout>
+                android:layout_height="200dp"
+                android:layout_margin="12dp">
 
-        <LinearLayout
-            android:id="@+id/linear2"
-            android:layout_width="match_parent"
-            android:layout_height="50dp"
-            android:layout_below="@+id/border"
-            android:layout_margin="12dp">
+                <com.rengwuxian.materialedittext.MaterialEditText
+                    android:id="@+id/txtisiPengaduan"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="top|left"
+                    android:hint="Apa keluhan anda ?"
+                    android:inputType="textMultiLine"
+                    android:lines="11"
+                    android:maxLines="12"
+                    android:minLines="10"
+                    android:scrollbars="vertical"
+                    android:textSize="15dp"
+                    app:met_baseColor="@android:color/black"
+                    app:met_floatingLabel="normal"
+                    app:met_floatingLabelTextColor="@android:color/black"
+                    app:met_primaryColor="@android:color/black" />
+            </LinearLayout>
 
-            <TextView
-                android:id="@+id/textView4"
+            <LinearLayout
+                android:id="@+id/linear2"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:layout_below="@+id/border"
+                android:layout_margin="12dp">
+
+                <TextView
+                    android:id="@+id/textView4"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="Harap cantumkan foto KTP dan foto pajak, supaya\nkami dapat memproses masukan anda."
+                    android:textAlignment="center" />
+            </LinearLayout>
+
+            <GridLayout
+                android:id="@+id/gridLayout"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="Harap cantumkan foto KTP dan foto pajak, supaya\nkami dapat memproses masukan anda."
-                android:textAlignment="center" />
-        </LinearLayout>
+                android:layout_below="@+id/linear2"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="10dp">
 
-        <GridLayout
-            android:id="@+id/gridLayout"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/linear2"
-            android:layout_centerHorizontal="true"
-            android:layout_marginTop="10dp">
+                <ImageView
+                    android:id="@+id/imageViewKTPPengaduan"
+                    android:layout_width="80dp"
+                    android:layout_height="80dp"
+                    android:layout_column="0"
+                    android:layout_row="0"
+                    app:srcCompat="@mipmap/ic_launcher" />
 
-            <ImageView
-                android:id="@+id/imageViewKTPPengaduan"
-                android:layout_width="80dp"
-                android:layout_height="80dp"
-                android:layout_column="0"
-                android:layout_row="0"
-                app:srcCompat="@mipmap/ic_launcher" />
+                <TextView
+                    android:id="@+id/txtKTPpengaduan"
+                    android:layout_width="80dp"
+                    android:layout_height="wrap_content"
+                    android:layout_column="0"
+                    android:layout_marginLeft="2dp"
+                    android:layout_row="1"
+                    android:text="Upload Foto KTP"
+                    android:textAlignment="center"
+                    android:textSize="10dp" />
 
-            <TextView
-                android:id="@+id/txtKTPpengaduan"
-                android:layout_width="80dp"
+                <ImageView
+                    android:id="@+id/imageViewPajakPengaduan"
+                    android:layout_width="80dp"
+                    android:layout_height="80dp"
+                    android:layout_column="1"
+                    android:layout_marginLeft="2dp"
+                    android:layout_row="0"
+                    app:srcCompat="@mipmap/ic_launcher" />
+
+                <TextView
+                    android:id="@+id/txtPajakpengaduan"
+                    android:layout_width="80dp"
+                    android:layout_height="wrap_content"
+                    android:layout_column="1"
+                    android:layout_row="1"
+                    android:text="Upload Foto Pajak"
+                    android:textAlignment="center"
+                    android:textSize="10dp" />
+
+
+            </GridLayout>
+
+            <Button
+                android:id="@+id/buttonPengaduan"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_column="0"
-                android:layout_marginLeft="2dp"
-                android:layout_row="1"
-                android:text="Upload Foto KTP"
-                android:textAlignment="center"
-                android:textSize="10dp" />
+                android:layout_alignEnd="@+id/linear2"
+                android:layout_alignStart="@+id/linear2"
+                android:layout_below="@+id/gridLayout"
+                android:layout_marginTop="20dp"
+                android:background="#03A9F4"
+                android:text="Kirim Pengaduan"
+                android:textColor="@android:color/white" />
+        </RelativeLayout>
 
-            <ImageView
-                android:id="@+id/imageViewPajakPengaduan"
-                android:layout_width="80dp"
-                android:layout_height="80dp"
-                android:layout_column="1"
-                android:layout_marginLeft="2dp"
-                android:layout_row="0"
-                app:srcCompat="@mipmap/ic_launcher" />
+    </ScrollView>
 
-            <TextView
-                android:id="@+id/txtPajakpengaduan"
-                android:layout_width="80dp"
-                android:layout_height="wrap_content"
-                android:layout_column="1"
-                android:layout_row="1"
-                android:text="Upload Foto Pajak"
-                android:textAlignment="center"
-                android:textSize="10dp" />
-
-
-        </GridLayout>
-
-        <Button
-            android:id="@+id/buttonPengaduan"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignEnd="@+id/linear2"
-            android:layout_alignStart="@+id/linear2"
-            android:layout_below="@+id/gridLayout"
-            android:layout_marginTop="20dp"
-            android:background="#03A9F4"
-            android:text="Kirim Pengaduan"
-            android:textColor="@android:color/white" />
-    </RelativeLayout>
 
 </FrameLayout>

@@ -1,6 +1,7 @@
 package com.example.pattimura.sundawenang;
 
 import android.app.ProgressDialog;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -52,7 +53,7 @@ import java.util.Map;
 
 public class LandingPage extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
-
+    public static final String MY_PREFS_NAME = "MyPrefsFile";
     Fragment fragment;
     TextView judul;
     String token;
@@ -66,18 +67,20 @@ public class LandingPage extends AppCompatActivity
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-
+        SharedPreferences prefs = getSharedPreferences(MY_PREFS_NAME, MODE_PRIVATE);
+        token = prefs.getString("token","not found");
+        //Toast.makeText(this, token, Toast.LENGTH_SHORT).show();
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.setDrawerListener(toggle);
         toggle.syncState();
 
-        Bundle b = getIntent().getExtras();
-        if (b != null) {
-            token = b.getString("token");
-            //Toast.makeText(this, token, Toast.LENGTH_SHORT).show();
-        }
+//        Bundle b = getIntent().getExtras();
+//        if (b != null) {
+//            token = b.getString("token");
+//            //Toast.makeText(this, token, Toast.LENGTH_SHORT).show();
+//        }
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);

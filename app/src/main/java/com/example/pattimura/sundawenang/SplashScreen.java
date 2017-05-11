@@ -1,6 +1,7 @@
 package com.example.pattimura.sundawenang;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -22,6 +23,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class SplashScreen extends AppCompatActivity {
+    public static final String MY_PREFS_NAME = "MyPrefsFile";
+    SharedPreferences.Editor editor;
     private static boolean splashLoaded = false;
     private String token;
 
@@ -29,7 +32,7 @@ public class SplashScreen extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash_screen);
-
+        editor = getSharedPreferences(MY_PREFS_NAME, MODE_PRIVATE).edit();
         ImageView logo = (ImageView) findViewById(R.id.imageView);
         ImageView spl = (ImageView) findViewById(R.id.splashscreenimage);
         Picasso.with(this).load(R.drawable.logoidev).fit().centerCrop().into(logo);
@@ -42,7 +45,6 @@ public class SplashScreen extends AppCompatActivity {
                     // This method will be executed once the timer is over
                     // Start your app main activity
                     Intent i = new Intent(SplashScreen.this, LandingPage.class);
-                    i.putExtra("token", token);
                     startActivity(i);
                     // close this activity
                     finish();
@@ -67,6 +69,8 @@ public class SplashScreen extends AppCompatActivity {
                         try {
                             JSONObject a = new JSONObject(response);
                             token = a.getString("token");
+                            editor.putString("token", token);
+                            editor.commit();
                             //Toast.makeText(getApplicationContext(), token, Toast.LENGTH_SHORT).show();
                         } catch (Exception e) {
                             //Toast.makeText(Produk.this.getContext(), "error : " + e.getMessage(), Toast.LENGTH_LONG).show();

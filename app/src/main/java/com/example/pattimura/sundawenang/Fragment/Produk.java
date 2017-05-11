@@ -2,6 +2,7 @@ package com.example.pattimura.sundawenang.Fragment;
 
 
 import android.app.ProgressDialog;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
@@ -35,10 +36,13 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
+import static android.content.Context.MODE_PRIVATE;
+
 /**
  * A simple {@link Fragment} subclass.
  */
 public class Produk extends Fragment {
+    public static final String MY_PREFS_NAME = "MyPrefsFile";
     AdapterProduk adapter;
     RelativeLayout lay;
     ListView list;
@@ -59,10 +63,8 @@ public class Produk extends Fragment {
         View v = inflater.inflate(R.layout.fragment_produk, container, false);
         list = (ListView) v.findViewById(R.id.listproduk);
         lay = (RelativeLayout) v.findViewById(R.id.layoutproduk);
-        Bundle b = getArguments();
-        if (b != null) {
-            token = b.getString("token");
-        }
+        SharedPreferences prefs = Produk.this.getActivity().getSharedPreferences(MY_PREFS_NAME, MODE_PRIVATE);
+        token = prefs.getString("token", "not found");
 
         currentpage = 1;
         lastpage = 1;

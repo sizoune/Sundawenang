@@ -2,6 +2,7 @@ package com.example.pattimura.sundawenang.Fragment;
 
 
 import android.app.ProgressDialog;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
@@ -36,10 +37,13 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
+import static android.content.Context.MODE_PRIVATE;
+
 /**
  * A simple {@link Fragment} subclass.
  */
 public class Aspirasi extends Fragment {
+    public static final String MY_PREFS_NAME = "MyPrefsFile";
     ArrayList<AspirasiModel> listaspirasi;
     AdapterAspirasi adapter;
     Fragment fragment;
@@ -65,10 +69,8 @@ public class Aspirasi extends Fragment {
         FloatingActionButton fab = (FloatingActionButton) v.findViewById(R.id.fab);
         ImageView cover = (ImageView) v.findViewById(R.id.imageView5);
         listAspirasi = (ListView) v.findViewById(R.id.listAspirasi);
-        Bundle b = getArguments();
-        if (b != null) {
-            token = b.getString("token");
-        }
+        SharedPreferences prefs = Aspirasi.this.getActivity().getSharedPreferences(MY_PREFS_NAME, MODE_PRIVATE);
+        token = prefs.getString("token", "not found");
         Picasso.with(Aspirasi.this.getContext()).load(R.drawable.aspirasi).fit().into(cover);
         listaspirasi = new ArrayList<>();
         adapter = new AdapterAspirasi(Aspirasi.this.getContext(), listaspirasi);
@@ -125,9 +127,6 @@ public class Aspirasi extends Fragment {
             @Override
             public void onClick(View v) {
                 fragment = new TambahAspirasi();
-                Bundle b = new Bundle();
-                b.putString("token", token);
-                fragment.setArguments(b);
                 FragmentTransaction ft = getFragmentManager().beginTransaction();
                 ft.replace(R.id.mainframe, fragment);
                 ft.commit();

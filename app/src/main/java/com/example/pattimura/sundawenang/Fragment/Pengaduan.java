@@ -41,6 +41,8 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
+import me.drakeet.materialdialog.MaterialDialog;
+
 import static android.app.Activity.RESULT_OK;
 import static android.content.Context.MODE_PRIVATE;
 
@@ -59,6 +61,7 @@ public class Pengaduan extends Fragment implements View.OnClickListener {
     private TextView txtKtp, txtPajak;
     private MaterialEditText isiPengaduan;
     private Drawable picktp, picpajak;
+    private MaterialDialog mMaterialDialog;
 
     public Pengaduan() {
         // Required empty public constructor
@@ -102,7 +105,18 @@ public class Pengaduan extends Fragment implements View.OnClickListener {
         } else if (v == submit) {
             if (!isiPengaduan.getText().toString().equals("") && ktpFileUri != null && pajakFileUri != null) {
                 kirimData(isiPengaduan.getText().toString(), ktpFileUri, pajakFileUri);
-                Toast.makeText(Pengaduan.this.getContext(), "Pengaduan berhasil ditambahkan !", Toast.LENGTH_SHORT).show();
+                View vi = View.inflate(getContext(), R.layout.layoutdialog, null);
+                mMaterialDialog = new MaterialDialog(Pengaduan.this.getContext())
+                        .setTitle("Tenant Changed !")
+                        .setView(vi)
+                        //.setMessage("Tenant name : " + getArguments().getString("nama") + "\nDescription : " + getArguments().getString("desc") + "\nStatus : " + getArguments().getString("status"))
+                        .setPositiveButton("OK", new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                mMaterialDialog.dismiss();
+                            }
+                        });
+                mMaterialDialog.show();
                 clearData();
             } else {
                 Toast.makeText(Pengaduan.this.getContext(), "Tolong lengkapi, isi pengaduan atau kelengkapan foto anda !", Toast.LENGTH_SHORT).show();

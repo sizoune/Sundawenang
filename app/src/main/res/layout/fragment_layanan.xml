@@ -80,7 +80,7 @@ desa. Harap cantumkan foto bukti pembayaran pajak dan KTP asli supaya kami dapat
                 android:layout_below="@+id/txtTelp"
                 android:layout_marginLeft="15dp"
                 android:layout_marginRight="15dp"
-                android:hint="NJOP"
+                android:hint="NPOP"
                 android:inputType="number"
                 app:met_baseColor="@android:color/black"
                 app:met_floatingLabel="normal"

@@ -52,6 +52,8 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
+import me.drakeet.materialdialog.MaterialDialog;
+
 import static android.app.Activity.RESULT_OK;
 import static android.content.Context.MODE_PRIVATE;
 
@@ -69,6 +71,7 @@ public class TambahAspirasi extends Fragment implements View.OnClickListener {
     private File files;
     private Button submit;
     private Drawable picktp;
+    private MaterialDialog mMaterialDialog;
 
     public TambahAspirasi() {
         // Required empty public constructor
@@ -110,17 +113,26 @@ public class TambahAspirasi extends Fragment implements View.OnClickListener {
             String nort = rt.getText().toString();
             String norw = rw.getText().toString();
             if (!(isi.equals("")) && !(name.equals("")) && !(nort.equals("")) && !(norw.equals("")) && ktpFileUri != null) {
-                showProgressDialog();
+                //showProgressDialog();
                 kirimData(ktpFileUri, isi, name, nort, norw);
                 //postGambar(ktpFileUri);
-                Fragment f = new Aspirasi();
-                hideProgressDialog();
-                Bundle b = new Bundle();
-                b.putString("token", token);
-                f.setArguments(b);
-                FragmentTransaction ft = getFragmentManager().beginTransaction();
-                ft.replace(R.id.mainframe, f);
-                ft.commit();
+                final Fragment f = new Aspirasi();
+                //hideProgressDialog();
+                View vi = View.inflate(getContext(), R.layout.layoutdialog, null);
+                mMaterialDialog = new MaterialDialog(TambahAspirasi.this.getContext())
+                        .setTitle("Tenant Changed !")
+                        .setView(vi)
+                        //.setMessage("Tenant name : " + getArguments().getString("nama") + "\nDescription : " + getArguments().getString("desc") + "\nStatus : " + getArguments().getString("status"))
+                        .setPositiveButton("OK", new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                mMaterialDialog.dismiss();
+                                FragmentTransaction ft = getFragmentManager().beginTransaction();
+                                ft.replace(R.id.mainframe, f);
+                                ft.commit();
+                            }
+                        });
+                mMaterialDialog.show();
             } else {
                 Toast.makeText(TambahAspirasi.this.getContext(), "Tolong lengkapi !, isi aspirasi, nama, rt, rw, ktp", Toast.LENGTH_SHORT).show();
                 return;

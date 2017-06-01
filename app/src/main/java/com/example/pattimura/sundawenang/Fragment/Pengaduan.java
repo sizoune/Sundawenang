@@ -13,6 +13,7 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.FileProvider;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -50,13 +51,12 @@ import static android.content.Context.MODE_PRIVATE;
  * A simple {@link Fragment} subclass.
  */
 public class Pengaduan extends Fragment implements View.OnClickListener {
-    public static final String MY_PREFS_NAME = "MyPrefsFile";
     private Uri pajakFileUri = null;
     private Uri ktpFileUri = null;
     private File filesktp, filespajak;
     private String status = "";
     private ImageView ktp, pajak;
-    private String namafile, token;
+    private String namafile;
     private Button submit;
     private TextView txtKtp, txtPajak;
     private MaterialEditText isiPengaduan;
@@ -81,8 +81,6 @@ public class Pengaduan extends Fragment implements View.OnClickListener {
         pajak = (ImageView) v.findViewById(R.id.imageViewPajakPengaduan);
         submit = (Button) v.findViewById(R.id.buttonPengaduan);
 
-        SharedPreferences prefs = Pengaduan.this.getActivity().getSharedPreferences(MY_PREFS_NAME, MODE_PRIVATE);
-        token = prefs.getString("token", "not found");
 
         Picasso.with(this.getContext()).load(R.drawable.buttonuploadfotobiru).fit().into(ktp);
         Picasso.with(this.getContext()).load(R.drawable.buttonuploadfotoijo).fit().into(pajak);
@@ -136,7 +134,7 @@ public class Pengaduan extends Fragment implements View.OnClickListener {
 
     private void kirimData(final String isi, final Uri ktpuri, final Uri pajakuri) {
         //final ProgressDialog dialog = ProgressDialog.show(TambahAspirasi.this.getContext(), "", "Loading. Please wait...", true);
-        VolleyMultipartRequest multipartRequest = new VolleyMultipartRequest(Request.Method.POST, "http://94.177.203.179/api/laporan?token=" + "\"" + token + "\"", new Response.Listener<NetworkResponse>() {
+        VolleyMultipartRequest multipartRequest = new VolleyMultipartRequest(Request.Method.POST, "http://94.177.203.179/api/report", new Response.Listener<NetworkResponse>() {
             @Override
             public void onResponse(NetworkResponse response) {
                 String resultResponse = new String(response.data);
@@ -206,12 +204,12 @@ public class Pengaduan extends Fragment implements View.OnClickListener {
         File file = new File(Environment.getExternalStorageDirectory(), UUID.randomUUID().toString() + ".jpg");
         if (status.equals("ktp")) {
             filesktp = file;
-            ktpFileUri = Uri.fromFile(file);
+            ktpFileUri = FileProvider.getUriForFile(Pengaduan.this.getContext(), Pengaduan.this.getActivity().getApplicationContext().getPackageName() + ".provider", file);
             takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, ktpFileUri);
             namafile = ktpFileUri.getLastPathSegment();
         } else if (status.equals("pajak")) {
             filespajak = file;
-            pajakFileUri = Uri.fromFile(file);
+            pajakFileUri = FileProvider.getUriForFile(Pengaduan.this.getContext(), Pengaduan.this.getActivity().getApplicationContext().getPackageName() + ".provider", file);
             takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, pajakFileUri);
             namafile = pajakFileUri.getLastPathSegment();
         }

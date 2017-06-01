@@ -10,6 +10,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AbsListView;
+import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
@@ -43,16 +44,17 @@ import static android.content.Context.MODE_PRIVATE;
  * A simple {@link Fragment} subclass.
  */
 public class Aspirasi extends Fragment {
-    public static final String MY_PREFS_NAME = "MyPrefsFile";
     ArrayList<AspirasiModel> listaspirasi;
     AdapterAspirasi adapter;
     Fragment fragment;
     RelativeLayout lay;
-    String token;
     ListView listAspirasi;
     int currentpage, lastpage, banyakdata, currentFirstVisibleItem, currentVisibleItemCount, currentScrollState;
     private ProgressDialog mProgressDialog;
     private boolean loading = false;
+    public static final String MY_PREFS_NAME = "MyPrefsFile";
+    SharedPreferences.Editor editor;
+    private String TAG;
 
     public Aspirasi() {
         // Required empty public constructor
@@ -63,14 +65,13 @@ public class Aspirasi extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
+        editor = getActivity().getSharedPreferences(MY_PREFS_NAME, MODE_PRIVATE).edit();
         currentpage = 1;
         lastpage = 1;
         View v = inflater.inflate(R.layout.fragment_aspirasi, container, false);
         FloatingActionButton fab = (FloatingActionButton) v.findViewById(R.id.fab);
         ImageView cover = (ImageView) v.findViewById(R.id.imageView5);
         listAspirasi = (ListView) v.findViewById(R.id.listAspirasi);
-        SharedPreferences prefs = Aspirasi.this.getActivity().getSharedPreferences(MY_PREFS_NAME, MODE_PRIVATE);
-        token = prefs.getString("token", "not found");
         Picasso.with(Aspirasi.this.getContext()).load(R.drawable.aspirasi).fit().into(cover);
         listaspirasi = new ArrayList<>();
         adapter = new AdapterAspirasi(Aspirasi.this.getContext(), listaspirasi);
@@ -127,8 +128,12 @@ public class Aspirasi extends Fragment {
             @Override
             public void onClick(View v) {
                 fragment = new TambahAspirasi();
+                TAG = "Aspirasi";
+                editor.putString("TAG", TAG);
+                editor.commit();
                 FragmentTransaction ft = getFragmentManager().beginTransaction();
                 ft.replace(R.id.mainframe, fragment);
+                ft.addToBackStack(TAG);
                 ft.commit();
             }
         });
@@ -164,7 +169,7 @@ public class Aspirasi extends Fragment {
 
     public void getdataAspirasi(int page) {
         //Creating a string request
-        StringRequest stringRequest = new StringRequest(Request.Method.GET, "http://94.177.203.179/api/aspiration?token=\"" + token + "\"&&page=" + page,
+        StringRequest stringRequest = new StringRequest(Request.Method.GET, "http://94.177.203.179/api/aspiration?page=" + page,
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
@@ -176,8 +181,10 @@ public class Aspirasi extends Fragment {
                             JSONArray isiaspirasi = listdata.getJSONArray("data");
                             for (int i = 0; i < isiaspirasi.length(); i++) {
                                 JSONObject object = isiaspirasi.getJSONObject(i);
-                                AspirasiModel asp = new AspirasiModel(object.getString("aspiration"), object.getString("name"), "http://94.177.203.179/storage/" + object.getString("photo_id"), object.getString("rt"), object.getString("rw"));
-                                listaspirasi.add(asp);
+                                if (object.getInt("accept") == 1) {
+                                    AspirasiModel asp = new AspirasiModel(object.getString("aspiration"), object.getString("name"), "http://94.177.203.179/storage/" + object.getString("photo_id"), object.getString("rt"), object.getString("rw"));
+                                    listaspirasi.add(asp);
+                                }
                             }
 //                            for (int i = 0; i < listdata.length(); i++) {
 //                                JSONObject object = listdata.getJSONObject(i);
@@ -191,6 +198,12 @@ public class Aspirasi extends Fragment {
                                 listAspirasi.setAdapter(adapter);
                                 loading = false;
                                 adapter.notifyDataSetChanged();
+                                listAspirasi.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                                    @Override
+                                    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                                        Toast.makeText(Aspirasi.this.getContext(), listaspirasi.get(position).getIsi(), Toast.LENGTH_SHORT).show();
+                                    }
+                                });
                             } else {
                                 hideProgressDialog();
                                 lay.setVisibility(View.VISIBLE);

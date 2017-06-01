@@ -2,9 +2,14 @@ package com.example.pattimura.sundawenang.Fragment;
 
 
 import android.app.ProgressDialog;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.util.Log;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,6 +25,8 @@ import com.example.pattimura.sundawenang.Model.BeritaModel;
 import com.example.pattimura.sundawenang.R;
 import com.squareup.picasso.Picasso;
 
+import static android.content.Context.MODE_PRIVATE;
+
 /**
  * A simple {@link Fragment} subclass.
  */
@@ -27,6 +34,8 @@ public class DetailBerita extends Fragment {
     WebView deskripsi;
     int lebar;
     ProgressDialog mProgressDialog;
+    public static final String MY_PREFS_NAME = "MyPrefsFile";
+    private String TAG;
 
     public DetailBerita() {
         // Required empty public constructor
@@ -39,6 +48,8 @@ public class DetailBerita extends Fragment {
         // Inflate the layout for this fragment
         View v = inflater.inflate(R.layout.fragment_detail_berita, container, false);
 
+        SharedPreferences prefs = getActivity().getSharedPreferences(MY_PREFS_NAME, MODE_PRIVATE);
+        TAG = prefs.getString("TAG", "not found");
 //        ImageView cover = (ImageView) v.findViewById(R.id.imageCoverberita);
 //        TextView judul = (TextView) v.findViewById(R.id.txtJuduldetailBerita);
 //        TextView tanggal = (TextView) v.findViewById(R.id.txtTanggaldetailberita);
@@ -78,6 +89,24 @@ public class DetailBerita extends Fragment {
 
 
         return v;
+    }
+
+    @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        getView().setFocusableInTouchMode(true);
+        getView().requestFocus();
+        getView().setOnKeyListener(new View.OnKeyListener() {
+            @Override
+            public boolean onKey(View v, int keyCode, KeyEvent event) {
+                if (event.getAction() == KeyEvent.ACTION_UP && keyCode == KeyEvent.KEYCODE_BACK) {
+                    Log.e("gif--", "fragment back key is clicked");
+                    getActivity().getSupportFragmentManager().popBackStack(TAG, FragmentManager.POP_BACK_STACK_INCLUSIVE);
+                    return true;
+                }
+                return false;
+            }
+        });
     }
 
     @Override

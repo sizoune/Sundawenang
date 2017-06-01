@@ -23,21 +23,17 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class SplashScreen extends AppCompatActivity {
-    public static final String MY_PREFS_NAME = "MyPrefsFile";
-    SharedPreferences.Editor editor;
     private static boolean splashLoaded = false;
-    private String token;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash_screen);
-        editor = getSharedPreferences(MY_PREFS_NAME, MODE_PRIVATE).edit();
+
         ImageView logo = (ImageView) findViewById(R.id.imageView);
         ImageView spl = (ImageView) findViewById(R.id.splashscreenimage);
         Picasso.with(this).load(R.drawable.logoidev).fit().centerCrop().into(logo);
         Picasso.with(this).load(R.drawable.splashbg).fit().into(spl);
-        getToken();
         if (!splashLoaded) {
             new Handler().postDelayed(new Runnable() {
                 @Override
@@ -60,49 +56,5 @@ public class SplashScreen extends AppCompatActivity {
 
     }
 
-    void getToken() {
-        //Creating a string request
-        StringRequest stringRequest = new StringRequest(Request.Method.POST, "http://94.177.203.179/api/auth/login",
-                new Response.Listener<String>() {
-                    @Override
-                    public void onResponse(String response) {
-                        try {
-                            JSONObject a = new JSONObject(response);
-                            token = a.getString("token");
-                            editor.putString("token", token);
-                            editor.commit();
-                            //Toast.makeText(getApplicationContext(), token, Toast.LENGTH_SHORT).show();
-                        } catch (Exception e) {
-                            //Toast.makeText(Produk.this.getContext(), "error : " + e.getMessage(), Toast.LENGTH_LONG).show();
-                        }
-//tempat response di dapatkan
-                    }
-                },
-                new Response.ErrorListener() {
-                    @Override
-                    public void onErrorResponse(VolleyError error) {
-                        //You can handle error here if you want
-                        error.printStackTrace();
-                        //Toast.makeText(Produk.this.getContext(), "erroring: " + error.getMessage(), Toast.LENGTH_SHORT).show();
-                    }
-                }) {
-            @Override
-            protected Map<String, String> getParams() throws AuthFailureError {
-                Map<String, String> params = new HashMap<>();
 
-                try {
-                    params.put("email", "sdwn.parungkuda@gmail.com");
-                    params.put("password", "sdwn123");
-                    return params;
-                } catch (Exception e) {
-                    Toast.makeText(getApplicationContext(), e.getMessage(), Toast.LENGTH_SHORT).show();
-                    return params;
-                }
-            }
-        };
-
-        //Adding the string request to the queue
-        RequestQueue requestQueue = Volley.newRequestQueue(getApplicationContext());
-        requestQueue.add(stringRequest);
-    }
 }

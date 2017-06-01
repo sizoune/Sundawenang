@@ -5,6 +5,7 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -14,6 +15,7 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.FileProvider;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -32,6 +34,7 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.example.pattimura.sundawenang.R;
+import com.example.pattimura.sundawenang.Utility;
 import com.example.pattimura.sundawenang.VolleyHelper.AppHelper;
 import com.example.pattimura.sundawenang.VolleyHelper.VolleyMultipartRequest;
 import com.example.pattimura.sundawenang.VolleyHelper.VolleySingleton;
@@ -54,21 +57,20 @@ import static com.example.pattimura.sundawenang.R.drawable.layanan;
  * A simple {@link Fragment} subclass.
  */
 public class Layanan extends Fragment implements View.OnClickListener {
-    public static final String MY_PREFS_NAME = "MyPrefsFile";
     private MaterialSpinner spinner;
     private Uri pajakFileUri = null;
     private Uri ktpFileUri = null;
     private Uri lainFileUri = null;
     private String status = "";
-    private String namafile;
+    private String namafile, userChoosenTask;
     private File filesktp, filespajak, fileslainnya;
     private ImageView ktp, pajak, lainnya;
     private Button submit;
     private TextView txtKtp, txtPajak, txtLainnya;
     private MaterialEditText nama, notel, njop;
-    private String token;
     private Drawable picktp, picpajak, piclain;
     private MaterialDialog mMaterialDialog;
+    private boolean result;
 
     public Layanan() {
         // Required empty public constructor
@@ -81,7 +83,7 @@ public class Layanan extends Fragment implements View.OnClickListener {
         // Inflate the layout for this fragment
         View v = inflater.inflate(R.layout.fragment_layanan, container, false);
 
-
+        result = false;
         ktp = (ImageView) v.findViewById(R.id.imageViewktplayanan);
         pajak = (ImageView) v.findViewById(R.id.imageViewpajaklayanan);
         lainnya = (ImageView) v.findViewById(R.id.imageViewlainlayanan);
@@ -97,8 +99,6 @@ public class Layanan extends Fragment implements View.OnClickListener {
         Picasso.with(this.getContext()).load(R.drawable.buttonuploadfotoijo).fit().into(pajak);
         Picasso.with(this.getContext()).load(R.drawable.buttonuploalainnya).fit().into(lainnya);
 
-        SharedPreferences prefs = Layanan.this.getActivity().getSharedPreferences(MY_PREFS_NAME, MODE_PRIVATE);
-        token = prefs.getString("token", "not found");
 
         String[] layanan = {"Pembuatan E-KTP", "Pembuatan Kartu Keluarga", "Layanan Posyandu"};
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(Layanan.this.getContext(), android.R.layout.simple_spinner_item, layanan);
@@ -167,7 +167,7 @@ public class Layanan extends Fragment implements View.OnClickListener {
 
     private void kirimData(final String nama, final String tipe, final String pone, final Uri ktpuri, final Uri pajakuri, final Uri lainnyauri, final String njop) {
         //final ProgressDialog dialog = ProgressDialog.show(TambahAspirasi.this.getContext(), "", "Loading. Please wait...", true);
-        VolleyMultipartRequest multipartRequest = new VolleyMultipartRequest(Request.Method.POST, "http://94.177.203.179/api/service?token=" + "\"" + token + "\"", new Response.Listener<NetworkResponse>() {
+        VolleyMultipartRequest multipartRequest = new VolleyMultipartRequest(Request.Method.POST, "http://94.177.203.179/api/service", new Response.Listener<NetworkResponse>() {
             @Override
             public void onResponse(NetworkResponse response) {
                 String resultResponse = new String(response.data);
@@ -192,7 +192,7 @@ public class Layanan extends Fragment implements View.OnClickListener {
                 params.put("name", nama);
                 params.put("type_service", tipe);
                 params.put("phone", pone);
-                params.put("njop", njop);
+                params.put("nop", njop);
                 return params;
             }
 
@@ -204,7 +204,7 @@ public class Layanan extends Fragment implements View.OnClickListener {
                 params.put("photo_id", new DataPart(ktpuri.getLastPathSegment(), AppHelper.getFileDataFromDrawable(Layanan.this.getContext(), picktp), "image/jpeg"));
                 params.put("photo_tax", new DataPart(pajakuri.getLastPathSegment(), AppHelper.getFileDataFromDrawable(Layanan.this.getContext(), picpajak), "image/jpeg"));
                 if (lainnyauri != null) {
-                    params.put("photos[]", new DataPart(lainnyauri.getLastPathSegment(), AppHelper.getFileDataFromDrawable(Layanan.this.getContext(), piclain), "image/jpeg"));
+                    params.put("photos", new DataPart(lainnyauri.getLastPathSegment(), AppHelper.getFileDataFromDrawable(Layanan.this.getContext(), piclain), "image/jpeg"));
                 }
                 //params.put("photo")
                 return params;
@@ -215,19 +215,43 @@ public class Layanan extends Fragment implements View.OnClickListener {
         VolleySingleton.getInstance(Layanan.this.getContext()).addToRequestQueue(multipartRequest);
     }
 
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+        switch (requestCode) {
+            case Utility.MY_PERMISSIONS_REQUEST_CAMERA:
+                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    if (userChoosenTask.equals("Ambil Foto"))
+                        launchCamera();
+                    else if (userChoosenTask.equals("Pilih dari Galeri"))
+                        pickdariGalery();
+                } else {
+                    //code for deny
+                }
+                break;
+        }
+    }
+
 
     private void photoBuilder() {
         AlertDialog.Builder builder = new AlertDialog.Builder(Layanan.this.getContext());
         builder.setPositiveButton("Ambil Gambar", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                launchCamera();
+                userChoosenTask = "Ambil Foto";
+                result = Utility.checkPermission(Layanan.this.getContext());
+                if (result) {
+                    launchCamera();
+                }
             }
         });
         builder.setNegativeButton("Pilih dari Galery", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                pickdariGalery();
+                userChoosenTask = "Pilih dari Galeri";
+                result = Utility.checkPermission(Layanan.this.getContext());
+                if (result) {
+                    pickdariGalery();
+                }
             }
         });
         AlertDialog alert = builder.create();
@@ -243,17 +267,20 @@ public class Layanan extends Fragment implements View.OnClickListener {
         File file = new File(Environment.getExternalStorageDirectory(), UUID.randomUUID().toString() + ".jpg");
         if (status.equals("ktp")) {
             filesktp = file;
-            ktpFileUri = Uri.fromFile(file);
+//            ktpFileUri = Uri.fromFile(file);
+            ktpFileUri = FileProvider.getUriForFile(Layanan.this.getContext(), Layanan.this.getActivity().getApplicationContext().getPackageName() + ".provider", file);
             takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, ktpFileUri);
             namafile = ktpFileUri.getLastPathSegment();
         } else if (status.equals("pajak")) {
             filespajak = file;
-            pajakFileUri = Uri.fromFile(file);
+//            pajakFileUri = Uri.fromFile(file);
+            pajakFileUri = FileProvider.getUriForFile(Layanan.this.getContext(), Layanan.this.getActivity().getApplicationContext().getPackageName() + ".provider", file);
             takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, pajakFileUri);
             namafile = pajakFileUri.getLastPathSegment();
         } else if (status.equals("lainnya")) {
             fileslainnya = file;
-            lainFileUri = Uri.fromFile(file);
+//            lainFileUri = Uri.fromFile(file);
+            lainFileUri = FileProvider.getUriForFile(Layanan.this.getContext(), Layanan.this.getActivity().getApplicationContext().getPackageName() + ".provider", file);
             takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, lainFileUri);
             namafile = lainFileUri.getLastPathSegment();
         }

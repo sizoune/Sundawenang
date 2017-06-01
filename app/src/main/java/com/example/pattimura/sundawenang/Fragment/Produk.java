@@ -42,14 +42,15 @@ import static android.content.Context.MODE_PRIVATE;
  * A simple {@link Fragment} subclass.
  */
 public class Produk extends Fragment {
-    public static final String MY_PREFS_NAME = "MyPrefsFile";
     AdapterProduk adapter;
     RelativeLayout lay;
     ListView list;
-    String token;
     int currentpage, lastpage, banyakdata, currentFirstVisibleItem, currentVisibleItemCount, currentScrollState;
     ArrayList<ProdukModel> daftarproduk = new ArrayList<>();
     private ProgressDialog mProgressDialog;
+    public static final String MY_PREFS_NAME = "MyPrefsFile";
+    SharedPreferences.Editor editor;
+    private String TAG;
 
     public Produk() {
         // Required empty public constructor
@@ -59,12 +60,12 @@ public class Produk extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+
+        editor = getActivity().getSharedPreferences(MY_PREFS_NAME, MODE_PRIVATE).edit();
         // Inflate the layout for this fragment
         View v = inflater.inflate(R.layout.fragment_produk, container, false);
         list = (ListView) v.findViewById(R.id.listproduk);
         lay = (RelativeLayout) v.findViewById(R.id.layoutproduk);
-        SharedPreferences prefs = Produk.this.getActivity().getSharedPreferences(MY_PREFS_NAME, MODE_PRIVATE);
-        token = prefs.getString("token", "not found");
 
         currentpage = 1;
         lastpage = 1;
@@ -141,7 +142,7 @@ public class Produk extends Fragment {
 
     void getallproduk(int page) {
         //Creating a string request
-        StringRequest stringRequest = new StringRequest(Request.Method.GET, "http://94.177.203.179/api/product?token=" + "\"" + token + "\"&&page=" + page,
+        StringRequest stringRequest = new StringRequest(Request.Method.GET, "http://94.177.203.179/api/product?page=" + page,
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
@@ -154,15 +155,16 @@ public class Produk extends Fragment {
                             for (int i = 0; i < isiproduk.length(); i++) {
                                 JSONObject object = isiproduk.getJSONObject(i);
                                 ProdukModel pm = new ProdukModel(object.getString("description"), object.getString("name_product"), object.getString("created_at"), object.getString("phone"));
-                                pm.addGambar("Produk ", "http://94.177.203.179/storage/" + object.getString("photo_id"));
+                                pm.addGambar("Produk", "http://94.177.203.179/storage/" + object.getString("photo_id"));
+                                JSONArray dataGambar = object.getJSONArray("photos");
+                                if (dataGambar != null && dataGambar.length() > 0) {
+                                    for (int x = 0; x < dataGambar.length(); x++) {
+                                        JSONObject photos = dataGambar.getJSONObject(x);
+                                        pm.addGambar("Produk " + Integer.toString(x + 1), "http://94.177.203.179/storage/" + photos.getString("photo"));
+                                    }
+                                }
                                 daftarproduk.add(pm);
                             }
-//                            for (int i = 0; i < listdata.length(); i++) {
-//                                JSONObject object = listdata.getJSONObject(i);
-//                                ProdukModel pm = new ProdukModel(object.getString("description"), object.getString("name_product"), object.getString("created_at"), object.getString("phone"));
-//                                pm.addGambar("Produk ", "http://94.177.203.179/storage/" + object.getString("photo_id"));
-//                                daftarproduk.add(pm);
-//                            }
                             if (!daftarproduk.isEmpty()) {
                                 lay.setVisibility(View.GONE);
                                 hideProgressDialog();
@@ -176,10 +178,13 @@ public class Produk extends Fragment {
                                         Bundle b = new Bundle();
                                         Fragment f = new DetailProduk();
                                         b.putParcelable("Produk", pm);
-                                        b.putString("token", token);
+                                        TAG = "Produk";
+                                        editor.putString("TAG", TAG);
+                                        editor.commit();
                                         f.setArguments(b);
                                         FragmentTransaction ft = getFragmentManager().beginTransaction();
                                         ft.replace(R.id.mainframe, f);
+                                        ft.addToBackStack(TAG);
                                         ft.commit();
                                     }
                                 });

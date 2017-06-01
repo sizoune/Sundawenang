@@ -2,9 +2,14 @@ package com.example.pattimura.sundawenang.Fragment;
 
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.util.Log;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -26,6 +31,8 @@ import java.util.HashMap;
 
 import info.hoang8f.widget.FButton;
 
+import static android.content.Context.MODE_PRIVATE;
+
 /**
  * A simple {@link Fragment} subclass.
  */
@@ -33,7 +40,8 @@ public class DetailProduk extends Fragment implements BaseSliderView.OnSliderCli
     ProdukModel produk;
     //FButton telp, sms;
     private SliderLayout mDemoSlider;
-    private String token;
+    public static final String MY_PREFS_NAME = "MyPrefsFile";
+    private String TAG;
 
     public DetailProduk() {
         // Required empty public constructor
@@ -46,12 +54,14 @@ public class DetailProduk extends Fragment implements BaseSliderView.OnSliderCli
         // Inflate the layout for this fragment
         View v = inflater.inflate(R.layout.fragment_detail_produk, container, false);
 
+        SharedPreferences prefs = getActivity().getSharedPreferences(MY_PREFS_NAME, MODE_PRIVATE);
+        TAG = prefs.getString("TAG", "not found");
+
         mDemoSlider = (SliderLayout) v.findViewById(R.id.slider);
 
         Bundle b = this.getArguments();
         if (b != null) {
             produk = b.getParcelable("Produk");
-            token = b.getString("token");
             TextView judul = (TextView) v.findViewById(R.id.textNamadetailProduk);
             TextView desc = (TextView) v.findViewById(R.id.textDescDetailProduk);
             TextView tanggal = (TextView) v.findViewById(R.id.textViewTanggalDetailProduk);
@@ -115,6 +125,24 @@ public class DetailProduk extends Fragment implements BaseSliderView.OnSliderCli
 
 
         return v;
+    }
+
+    @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        getView().setFocusableInTouchMode(true);
+        getView().requestFocus();
+        getView().setOnKeyListener(new View.OnKeyListener() {
+            @Override
+            public boolean onKey(View v, int keyCode, KeyEvent event) {
+                if (event.getAction() == KeyEvent.ACTION_UP && keyCode == KeyEvent.KEYCODE_BACK) {
+                    Log.e("gif--", "fragment back key is clicked");
+                    getActivity().getSupportFragmentManager().popBackStack(TAG, FragmentManager.POP_BACK_STACK_INCLUSIVE);
+                    return true;
+                }
+                return false;
+            }
+        });
     }
 
     @Override

@@ -14,10 +14,13 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v4.content.FileProvider;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -61,17 +64,18 @@ import static android.content.Context.MODE_PRIVATE;
  * A simple {@link Fragment} subclass.
  */
 public class TambahAspirasi extends Fragment implements View.OnClickListener {
-    public static final String MY_PREFS_NAME = "MyPrefsFile";
     private ProgressDialog mProgressDialog;
     private MaterialEditText isiAspirasi, nama, rt, rw;
     private TextView txtKtp;
     private ImageView fotoktp, temp;
-    private String namafile, token;
+    private String namafile;
     private Uri ktpFileUri = null;
     private File files;
     private Button submit;
     private Drawable picktp;
     private MaterialDialog mMaterialDialog;
+    public static final String MY_PREFS_NAME = "MyPrefsFile";
+    private String TAG;
 
     public TambahAspirasi() {
         // Required empty public constructor
@@ -94,8 +98,9 @@ public class TambahAspirasi extends Fragment implements View.OnClickListener {
         txtKtp = (TextView) v.findViewById(R.id.textViewKTPTambahaspirasi);
         submit = (Button) v.findViewById(R.id.buttonKirimAspirasi);
 
-        SharedPreferences prefs = TambahAspirasi.this.getActivity().getSharedPreferences(MY_PREFS_NAME, MODE_PRIVATE);
-        token = prefs.getString("token", "not found");
+        SharedPreferences prefs = getActivity().getSharedPreferences(MY_PREFS_NAME, MODE_PRIVATE);
+        TAG = prefs.getString("TAG", "not found");
+
         //Toast.makeText(TambahAspirasi.this.getContext(), token, Toast.LENGTH_SHORT).show();
         Picasso.with(this.getContext()).load(R.drawable.buttonuploadfotobiru).fit().into(fotoktp);
 
@@ -142,10 +147,28 @@ public class TambahAspirasi extends Fragment implements View.OnClickListener {
         }
     }
 
+    @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        getView().setFocusableInTouchMode(true);
+        getView().requestFocus();
+        getView().setOnKeyListener(new View.OnKeyListener() {
+            @Override
+            public boolean onKey(View v, int keyCode, KeyEvent event) {
+                if (event.getAction() == KeyEvent.ACTION_UP && keyCode == KeyEvent.KEYCODE_BACK) {
+                    Log.e("gif--", "fragment back key is clicked");
+                    getActivity().getSupportFragmentManager().popBackStack(TAG, FragmentManager.POP_BACK_STACK_INCLUSIVE);
+                    return true;
+                }
+                return false;
+            }
+        });
+    }
+
 
     private void kirimData(final Uri fileUri, final String isi, final String nama, final String rt, final String rw) {
         //final ProgressDialog dialog = ProgressDialog.show(TambahAspirasi.this.getContext(), "", "Loading. Please wait...", true);
-        VolleyMultipartRequest multipartRequest = new VolleyMultipartRequest(Request.Method.POST, "http://94.177.203.179/api/aspiration?token=" + "\"" + token + "\"", new Response.Listener<NetworkResponse>() {
+        VolleyMultipartRequest multipartRequest = new VolleyMultipartRequest(Request.Method.POST, "http://94.177.203.179/api/aspiration", new Response.Listener<NetworkResponse>() {
             @Override
             public void onResponse(NetworkResponse response) {
                 String resultResponse = new String(response.data);
@@ -215,7 +238,7 @@ public class TambahAspirasi extends Fragment implements View.OnClickListener {
         // Choose file storage location
         File file = new File(Environment.getExternalStorageDirectory(), UUID.randomUUID().toString() + ".jpg");
         files = file;
-        ktpFileUri = Uri.fromFile(file);
+        ktpFileUri = FileProvider.getUriForFile(TambahAspirasi.this.getContext(), TambahAspirasi.this.getActivity().getApplicationContext().getPackageName() + ".provider", file);
         takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, ktpFileUri);
         namafile = ktpFileUri.getLastPathSegment();
         // Launch intent

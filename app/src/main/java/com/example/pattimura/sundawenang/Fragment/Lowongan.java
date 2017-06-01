@@ -42,14 +42,15 @@ import static android.content.Context.MODE_PRIVATE;
  * A simple {@link Fragment} subclass.
  */
 public class Lowongan extends Fragment {
-    public static final String MY_PREFS_NAME = "MyPrefsFile";
     AdpterLowongan adapter;
     ArrayList<LowonganModel> daftarlowongan = new ArrayList<>();
     RelativeLayout kosong;
     ListView listlowongan;
-    String token;
     int currentpage, lastpage, banyakdata, currentFirstVisibleItem, currentVisibleItemCount, currentScrollState;
     private ProgressDialog mProgressDialog;
+    public static final String MY_PREFS_NAME = "MyPrefsFile";
+    SharedPreferences.Editor editor;
+    private String TAG;
 
     public Lowongan() {
         // Required empty public constructor
@@ -59,14 +60,14 @@ public class Lowongan extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+
+        editor = getActivity().getSharedPreferences(MY_PREFS_NAME, MODE_PRIVATE).edit();
         // Inflate the layout for this fragment
         View v = inflater.inflate(R.layout.fragment_lowongan, container, false);
 
         currentpage = 1;
         lastpage = 1;
 
-        SharedPreferences prefs = Lowongan.this.getActivity().getSharedPreferences(MY_PREFS_NAME, MODE_PRIVATE);
-        token = prefs.getString("token", "not found");
 
         listlowongan = (ListView) v.findViewById(R.id.listLowongan);
         kosong = (RelativeLayout) v.findViewById(R.id.layoutlowongan);
@@ -138,7 +139,7 @@ public class Lowongan extends Fragment {
 
     void getAlllowongan(int page) {
         //Creating a string request
-        StringRequest stringRequest = new StringRequest(Request.Method.GET, "http://94.177.203.179/api/job?token=" + "\"" + token + "\"&&page=" + page,
+        StringRequest stringRequest = new StringRequest(Request.Method.GET, "http://94.177.203.179/api/job?page=" + page,
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
@@ -175,8 +176,12 @@ public class Lowongan extends Fragment {
                                         Fragment f = new DetailLowongan();
                                         b.putParcelable("Lowongan", pm);
                                         f.setArguments(b);
+                                        TAG = "Lowongan";
+                                        editor.putString("TAG", TAG);
+                                        editor.commit();
                                         FragmentTransaction ft = getFragmentManager().beginTransaction();
                                         ft.replace(R.id.mainframe, f);
+                                        ft.addToBackStack(TAG);
                                         ft.commit();
                                     }
                                 });

@@ -3,6 +3,7 @@ package com.example.pattimura.sundawenang.Fragment;
 
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
@@ -38,6 +39,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
+import static android.content.Context.MODE_PRIVATE;
+
 /**
  * A simple {@link Fragment} subclass.
  */
@@ -47,6 +50,9 @@ public class Berita extends Fragment {
     RelativeLayout lay;
     ListView list;
     private ProgressDialog mProgressDialog;
+    public static final String MY_PREFS_NAME = "MyPrefsFile";
+    SharedPreferences.Editor editor;
+    private String TAG;
 
     public Berita() {
         // Required empty public constructor
@@ -56,6 +62,9 @@ public class Berita extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+
+        editor = getActivity().getSharedPreferences(MY_PREFS_NAME, MODE_PRIVATE).edit();
+
         // Inflate the layout for this fragment
         View v = inflater.inflate(R.layout.fragment_berita, container, false);
         list = (ListView) v.findViewById(R.id.listberita);
@@ -145,9 +154,13 @@ public class Berita extends Fragment {
                                         Bundle b = new Bundle();
                                         Fragment f = new DetailBerita();
                                         b.putParcelable("Berita", bm);
+                                        TAG = "Berita";
+                                        editor.putString("TAG", TAG);
+                                        editor.commit();
                                         f.setArguments(b);
                                         FragmentTransaction ft = getFragmentManager().beginTransaction();
                                         ft.replace(R.id.mainframe, f);
+                                        ft.addToBackStack(TAG);
                                         ft.commit();
                                     }
                                 });

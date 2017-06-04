@@ -6,6 +6,7 @@ import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -42,6 +43,7 @@ import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.example.pattimura.sundawenang.Model.AspirasiModel;
 import com.example.pattimura.sundawenang.R;
+import com.example.pattimura.sundawenang.Utility;
 import com.example.pattimura.sundawenang.VolleyHelper.AppHelper;
 import com.example.pattimura.sundawenang.VolleyHelper.VolleyMultipartRequest;
 import com.example.pattimura.sundawenang.VolleyHelper.VolleySingleton;
@@ -77,7 +79,8 @@ public class TambahAspirasi extends Fragment implements View.OnClickListener {
     private Drawable picktp;
     private MaterialDialog mMaterialDialog;
     public static final String MY_PREFS_NAME = "MyPrefsFile";
-    private String TAG;
+    private String TAG, userChoosenTask;
+    private boolean result = false;
 
     public TambahAspirasi() {
         // Required empty public constructor
@@ -91,7 +94,7 @@ public class TambahAspirasi extends Fragment implements View.OnClickListener {
         View v = inflater.inflate(R.layout.fragment_tambah_aspirasi, container, false);
 
         temp = new ImageView(TambahAspirasi.this.getContext());
-
+        userChoosenTask = "";
         fotoktp = (ImageView) v.findViewById(R.id.imageKTPAspirasi);
         isiAspirasi = (MaterialEditText) v.findViewById(R.id.txtisiAspirasi);
         nama = (MaterialEditText) v.findViewById(R.id.txtNamaAspirasi);
@@ -216,22 +219,47 @@ public class TambahAspirasi extends Fragment implements View.OnClickListener {
         VolleySingleton.getInstance(TambahAspirasi.this.getContext()).addToRequestQueue(multipartRequest);
     }
 
+
     private void photoBuilder() {
         AlertDialog.Builder builder = new AlertDialog.Builder(TambahAspirasi.this.getContext());
         builder.setPositiveButton("Ambil Gambar", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                launchCamera();
+                userChoosenTask = "Ambil Foto";
+                result = Utility.checkPermission(TambahAspirasi.this.getContext());
+                if (result) {
+                    launchCamera();
+                }
             }
         });
         builder.setNegativeButton("Pilih dari Galery", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                pickdariGalery();
+                userChoosenTask = "Pilih dari Galeri";
+                result = Utility.checkPermission(TambahAspirasi.this.getContext());
+                if (result) {
+                    pickdariGalery();
+                }
             }
         });
         AlertDialog alert = builder.create();
         alert.show();
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+        switch (requestCode) {
+            case Utility.MY_PERMISSIONS_REQUEST_CAMERA:
+                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    if (userChoosenTask.equals("Ambil Foto"))
+                        launchCamera();
+                    else if (userChoosenTask.equals("Pilih dari Galeri"))
+                        pickdariGalery();
+                } else {
+                    //code for deny
+                }
+                break;
+        }
     }
 
     private void launchCamera() {

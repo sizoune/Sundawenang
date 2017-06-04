@@ -5,6 +5,7 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
@@ -33,6 +34,7 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.example.pattimura.sundawenang.R;
+import com.example.pattimura.sundawenang.Utility;
 import com.example.pattimura.sundawenang.VolleyHelper.AppHelper;
 import com.example.pattimura.sundawenang.VolleyHelper.VolleyMultipartRequest;
 import com.example.pattimura.sundawenang.VolleyHelper.VolleySingleton;
@@ -59,7 +61,7 @@ public class Pengaduan extends Fragment implements View.OnClickListener {
     private Uri pajakFileUri = null;
     private Uri ktpFileUri = null;
     private File filesktp, filespajak;
-    private String status = "";
+    private String status = "", userChoosenTask = "";
     private ImageView ktp, pajak;
     private String namafile;
     private Button submit;
@@ -68,6 +70,7 @@ public class Pengaduan extends Fragment implements View.OnClickListener {
     private Drawable picktp, picpajak;
     private MaterialDialog mMaterialDialog;
     public int total = 0;
+    private boolean result = false;
 
     public Pengaduan() {
         // Required empty public constructor
@@ -217,17 +220,41 @@ public class Pengaduan extends Fragment implements View.OnClickListener {
         builder.setPositiveButton("Ambil Gambar", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                launchCamera();
+                userChoosenTask = "Ambil Foto";
+                result = Utility.checkPermission(Pengaduan.this.getContext());
+                if (result) {
+                    launchCamera();
+                }
             }
         });
         builder.setNegativeButton("Pilih dari Galery", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                pickdariGalery();
+                userChoosenTask = "Pilih dari Galeri";
+                result = Utility.checkPermission(Pengaduan.this.getContext());
+                if (result) {
+                    pickdariGalery();
+                }
             }
         });
         AlertDialog alert = builder.create();
         alert.show();
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+        switch (requestCode) {
+            case Utility.MY_PERMISSIONS_REQUEST_CAMERA:
+                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    if (userChoosenTask.equals("Ambil Foto"))
+                        launchCamera();
+                    else if (userChoosenTask.equals("Pilih dari Galeri"))
+                        pickdariGalery();
+                } else {
+                    //code for deny
+                }
+                break;
+        }
     }
 
     private void launchCamera() {

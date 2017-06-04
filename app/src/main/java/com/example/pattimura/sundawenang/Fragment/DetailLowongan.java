@@ -1,19 +1,26 @@
 package com.example.pattimura.sundawenang.Fragment;
 
 
+import android.Manifest;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
+import android.support.v4.content.ContextCompat;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.andexert.library.RippleView;
 import com.daimajia.slider.library.Animations.DescriptionAnimation;
@@ -100,9 +107,13 @@ public class DetailLowongan extends Fragment implements BaseSliderView.OnSliderC
             telp.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Intent callintent = new Intent(Intent.ACTION_CALL);
-                    callintent.setData(Uri.parse("tel:" + lm.getNotel()));
-                    startActivity(callintent);
+                    if (android.os.Build.VERSION.SDK_INT == Build.VERSION_CODES.M) {
+                        onCall(lm.getNotel());
+                    } else {
+                        Intent callintent = new Intent(Intent.ACTION_CALL);
+                        callintent.setData(Uri.parse("tel:" + lm.getNotel()));
+                        startActivity(callintent);
+                    }
                 }
             });
 
@@ -117,6 +128,34 @@ public class DetailLowongan extends Fragment implements BaseSliderView.OnSliderC
         }
 
         return v;
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        switch (requestCode) {
+            case 123:
+                if ((grantResults.length > 0) && (grantResults[0] == PackageManager.PERMISSION_GRANTED)) {
+                    onCall(lm.getNotel());
+                } else {
+                    Toast.makeText(DetailLowongan.this.getContext(), "maaf anda tidak mengizinkan penggunaan fitur ini !", Toast.LENGTH_SHORT).show();
+                }
+                break;
+
+            default:
+                break;
+        }
+    }
+
+    public void onCall(String notel) {
+        int permissionCheck = ContextCompat.checkSelfPermission(DetailLowongan.this.getContext(), Manifest.permission.CALL_PHONE);
+        if (permissionCheck != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(
+                    DetailLowongan.this.getActivity(),
+                    new String[]{Manifest.permission.CALL_PHONE},
+                    123);
+        } else {
+            startActivity(new Intent(Intent.ACTION_CALL).setData(Uri.parse("tel:" + notel)));
+        }
     }
 
     @Override

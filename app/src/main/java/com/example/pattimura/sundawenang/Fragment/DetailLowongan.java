@@ -109,9 +109,8 @@ public class DetailLowongan extends Fragment implements BaseSliderView.OnSliderC
             sms.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Intent smsIntent = new Intent(Intent.ACTION_VIEW);
-                    smsIntent.setType("vnd.android-dir/mms-sms");
-                    smsIntent.putExtra("address", lm.getNotel());
+                    Intent smsIntent = new Intent(Intent.ACTION_SENDTO);
+                    smsIntent.setData(Uri.parse("smsto:" + Uri.encode(lm.getNotel())));
                     startActivity(smsIntent);
                 }
             });

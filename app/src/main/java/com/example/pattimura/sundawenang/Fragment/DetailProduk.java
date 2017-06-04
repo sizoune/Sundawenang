@@ -115,9 +115,8 @@ public class DetailProduk extends Fragment implements BaseSliderView.OnSliderCli
             sms.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Intent smsIntent = new Intent(Intent.ACTION_VIEW);
-                    smsIntent.setType("vnd.android-dir/mms-sms");
-                    smsIntent.putExtra("address", produk.getNotel());
+                    Intent smsIntent = new Intent(Intent.ACTION_SENDTO);
+                    smsIntent.setData(Uri.parse("smsto:" + Uri.encode(produk.getNotel())));
                     startActivity(smsIntent);
                 }
             });

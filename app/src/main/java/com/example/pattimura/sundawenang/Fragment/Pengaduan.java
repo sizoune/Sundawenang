@@ -37,6 +37,9 @@ import com.example.pattimura.sundawenang.VolleyHelper.VolleySingleton;
 import com.rengwuxian.materialedittext.MaterialEditText;
 import com.squareup.picasso.Picasso;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
@@ -62,6 +65,7 @@ public class Pengaduan extends Fragment implements View.OnClickListener {
     private MaterialEditText isiPengaduan;
     private Drawable picktp, picpajak;
     private MaterialDialog mMaterialDialog;
+    public int total = 0;
 
     public Pengaduan() {
         // Required empty public constructor
@@ -88,6 +92,8 @@ public class Pengaduan extends Fragment implements View.OnClickListener {
         ktp.setOnClickListener(this);
         pajak.setOnClickListener(this);
         submit.setOnClickListener(this);
+
+        getTotalData();
 
         return v;
     }
@@ -132,6 +138,27 @@ public class Pengaduan extends Fragment implements View.OnClickListener {
         txtPajak.setText("Upload Foto Pajak");
     }
 
+    private void getTotalData() {
+        StringRequest stringRequest = new StringRequest(Request.Method.GET, "http://94.177.203.179/api/report", new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                try {
+                    JSONObject listdata = new JSONObject(response);
+                    total = listdata.getInt("total");
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+
+            }
+        });
+        RequestQueue requestQueue = Volley.newRequestQueue(this.getContext());
+        requestQueue.add(stringRequest);
+    }
+
     private void kirimData(final String isi, final Uri ktpuri, final Uri pajakuri) {
         //final ProgressDialog dialog = ProgressDialog.show(TambahAspirasi.this.getContext(), "", "Loading. Please wait...", true);
         VolleyMultipartRequest multipartRequest = new VolleyMultipartRequest(Request.Method.POST, "http://94.177.203.179/api/report", new Response.Listener<NetworkResponse>() {
@@ -139,7 +166,7 @@ public class Pengaduan extends Fragment implements View.OnClickListener {
             public void onResponse(NetworkResponse response) {
                 String resultResponse = new String(response.data);
 //                try {
-//
+
 //                } catch (JSONException e) {
 //                    e.printStackTrace();
 //                }
@@ -156,7 +183,7 @@ public class Pengaduan extends Fragment implements View.OnClickListener {
             @Override
             protected Map<String, String> getParams() {
                 Map<String, String> params = new HashMap<>();
-                params.put("title", "judul report");
+                params.put("title", "Report " + Integer.toString(total));
                 params.put("report", isi);
                 return params;
             }

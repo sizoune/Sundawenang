@@ -32,9 +32,11 @@ import android.widget.Toast;
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.NetworkResponse;
+import com.android.volley.NoConnectionError;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
+import com.android.volley.TimeoutError;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
@@ -183,7 +185,9 @@ public class TambahAspirasi extends Fragment implements View.OnClickListener {
             public void onErrorResponse(VolleyError error) {
                 error.printStackTrace();
 //
-                //dialog.dismiss();
+                if (error instanceof TimeoutError || error instanceof NoConnectionError) {
+                    Toast.makeText(TambahAspirasi.this.getContext(), "Tidak dapat memuat data\nTolong perika koneksi internet anda !", Toast.LENGTH_LONG).show();
+                }
 
             }
         }) {

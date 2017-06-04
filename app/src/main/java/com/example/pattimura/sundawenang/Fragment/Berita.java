@@ -183,6 +183,7 @@ public class Berita extends Fragment {
                         error.printStackTrace();
                         if (error instanceof TimeoutError || error instanceof NoConnectionError) {
                             Toast.makeText(Berita.this.getContext(), "Tidak dapat memuat data\nTolong perika koneksi internet anda !", Toast.LENGTH_LONG).show();
+                            hideProgressDialog();
                         }
                     }
                 }) {

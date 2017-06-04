@@ -223,6 +223,7 @@ public class Aspirasi extends Fragment {
                         error.printStackTrace();
                         if (error instanceof TimeoutError || error instanceof NoConnectionError) {
                             Toast.makeText(Aspirasi.this.getContext(), "Tidak dapat memuat data\nTolong perika koneksi internet anda !", Toast.LENGTH_LONG).show();
+                            hideProgressDialog();
                         }
                     }
                 }) {

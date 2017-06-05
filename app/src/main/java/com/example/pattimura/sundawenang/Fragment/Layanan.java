@@ -14,8 +14,12 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.content.FileProvider;
+import android.util.Log;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -73,6 +77,8 @@ public class Layanan extends Fragment implements View.OnClickListener {
     private Drawable picktp, picpajak, piclain;
     private MaterialDialog mMaterialDialog;
     private boolean result;
+    public static final String MY_PREFS_NAME = "MyPrefsFile";
+    private String TAG;
 
     public Layanan() {
         // Required empty public constructor
@@ -84,6 +90,9 @@ public class Layanan extends Fragment implements View.OnClickListener {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View v = inflater.inflate(R.layout.fragment_layanan, container, false);
+
+        SharedPreferences prefs = getActivity().getSharedPreferences(MY_PREFS_NAME, MODE_PRIVATE);
+        TAG = prefs.getString("TAG", "not found");
 
         result = false;
         ktp = (ImageView) v.findViewById(R.id.imageViewktplayanan);
@@ -149,6 +158,23 @@ public class Layanan extends Fragment implements View.OnClickListener {
                 clearData();
             }
         }
+    }
+
+    @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        getView().setFocusableInTouchMode(true);
+        getView().requestFocus();
+        getView().setOnKeyListener(new View.OnKeyListener() {
+            @Override
+            public boolean onKey(View v, int keyCode, KeyEvent event) {
+                if (event.getAction() == KeyEvent.ACTION_UP && keyCode == KeyEvent.KEYCODE_BACK) {
+                    Layanan.this.getActivity().finish();
+                    return true;
+                }
+                return false;
+            }
+        });
     }
 
     void clearData() {

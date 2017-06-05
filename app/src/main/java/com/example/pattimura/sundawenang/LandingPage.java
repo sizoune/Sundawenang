@@ -6,10 +6,12 @@ import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.text.SpannableString;
 import android.text.style.AbsoluteSizeSpan;
 import android.text.style.ForegroundColorSpan;
+import android.util.Log;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -56,7 +58,7 @@ public class LandingPage extends AppCompatActivity
     Fragment fragment;
     TextView judul;
     private ProgressDialog mProgressDialog;
-
+    private FragmentManager fm;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -70,6 +72,8 @@ public class LandingPage extends AppCompatActivity
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.setDrawerListener(toggle);
         toggle.syncState();
+        fm = getSupportFragmentManager();
+
 
 //        Bundle b = getIntent().getExtras();
 //        if (b != null) {
@@ -92,16 +96,6 @@ public class LandingPage extends AppCompatActivity
         ft.commit();
     }
 
-
-    @Override
-    public void onBackPressed() {
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        if (drawer.isDrawerOpen(GravityCompat.START)) {
-            drawer.closeDrawer(GravityCompat.START);
-        } else {
-            super.onBackPressed();
-        }
-    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -146,6 +140,7 @@ public class LandingPage extends AppCompatActivity
             fragment.setArguments(b);
             FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
             ft.replace(R.id.mainframe, fragment);
+            //ft.addToBackStack("Berita");
             ft.commit();
         } else if (id == R.id.nav_produk) {
             judul.setText("PRODUK");
@@ -154,6 +149,7 @@ public class LandingPage extends AppCompatActivity
             fragment.setArguments(b);
             FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
             ft.replace(R.id.mainframe, fragment);
+            //ft.addToBackStack("Berita");
             ft.commit();
         } else if (id == R.id.nav_layanan) {
             judul.setText("PELAYANAN");
@@ -162,6 +158,7 @@ public class LandingPage extends AppCompatActivity
             fragment.setArguments(b);
             FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
             ft.replace(R.id.mainframe, fragment);
+            //ft.addToBackStack("Berita");
             ft.commit();
         } else if (id == R.id.nav_aspirasi) {
             judul.setText("ASPIRASI");
@@ -170,6 +167,7 @@ public class LandingPage extends AppCompatActivity
             fragment.setArguments(b);
             FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
             ft.replace(R.id.mainframe, fragment);
+            //ft.addToBackStack("Berita");
             ft.commit();
         } else if (id == R.id.nav_pengaduan) {
             judul.setText("PENGADUAN");
@@ -178,11 +176,30 @@ public class LandingPage extends AppCompatActivity
             fragment.setArguments(b);
             FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
             ft.replace(R.id.mainframe, fragment);
+            //ft.addToBackStack("Berita");
             ft.commit();
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
+    }
+
+    @Override
+    public void onBackPressed() {
+        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        if (drawer.isDrawerOpen(GravityCompat.START)) {
+            drawer.closeDrawer(GravityCompat.START);
+        } else {
+            super.onBackPressed();
+        }
+//
+//        if (fm.getBackStackEntryCount() > 0) {
+//            Log.i("MainActivity", "popping backstack");
+//            fm.popBackStack();
+//        } else {
+//            Log.i("MainActivity", "nothing on backstack, calling super");
+//            super.onBackPressed();
+//        }
     }
 }

@@ -15,8 +15,10 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.crashlytics.android.Crashlytics;
 import com.squareup.picasso.Picasso;
 
+import io.fabric.sdk.android.Fabric;
 import org.json.JSONObject;
 
 import java.util.HashMap;
@@ -28,6 +30,7 @@ public class SplashScreen extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Fabric.with(this, new Crashlytics());
         setContentView(R.layout.activity_splash_screen);
 
         ImageView logo = (ImageView) findViewById(R.id.imageView);

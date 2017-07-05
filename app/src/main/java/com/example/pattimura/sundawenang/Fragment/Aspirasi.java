@@ -171,7 +171,7 @@ public class Aspirasi extends Fragment {
 
     public void getdataAspirasi(int page) {
         //Creating a string request
-        StringRequest stringRequest = new StringRequest(Request.Method.GET, "http://94.177.203.179/api/aspiration?page=" + page,
+        StringRequest stringRequest = new StringRequest(Request.Method.GET, "http://212.237.31.161/api/aspiration?page=" + page,
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {

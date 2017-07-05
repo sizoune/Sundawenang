@@ -195,7 +195,7 @@ public class Layanan extends Fragment implements View.OnClickListener {
 
     private void kirimData(final String nama, final String tipe, final String pone, final Uri ktpuri, final Uri pajakuri, final Uri lainnyauri, final String njop) {
         //final ProgressDialog dialog = ProgressDialog.show(TambahAspirasi.this.getContext(), "", "Loading. Please wait...", true);
-        VolleyMultipartRequest multipartRequest = new VolleyMultipartRequest(Request.Method.POST, "http://94.177.203.179/api/service", new Response.Listener<NetworkResponse>() {
+        VolleyMultipartRequest multipartRequest = new VolleyMultipartRequest(Request.Method.POST, "http://212.237.31.161/api/service", new Response.Listener<NetworkResponse>() {
             @Override
             public void onResponse(NetworkResponse response) {
                 String resultResponse = new String(response.data);
@@ -251,10 +251,7 @@ public class Layanan extends Fragment implements View.OnClickListener {
         switch (requestCode) {
             case Utility.MY_PERMISSIONS_REQUEST_CAMERA:
                 if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    if (userChoosenTask.equals("Ambil Foto"))
-                        launchCamera();
-                    else if (userChoosenTask.equals("Pilih dari Galeri"))
-                        pickdariGalery();
+                    launchCamera();
                 } else {
                     //code for deny
                 }

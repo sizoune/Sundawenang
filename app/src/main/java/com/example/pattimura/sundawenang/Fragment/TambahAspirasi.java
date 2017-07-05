@@ -173,7 +173,7 @@ public class TambahAspirasi extends Fragment implements View.OnClickListener {
 
     private void kirimData(final Uri fileUri, final String isi, final String nama, final String rt, final String rw) {
         //final ProgressDialog dialog = ProgressDialog.show(TambahAspirasi.this.getContext(), "", "Loading. Please wait...", true);
-        VolleyMultipartRequest multipartRequest = new VolleyMultipartRequest(Request.Method.POST, "http://94.177.203.179/api/aspiration", new Response.Listener<NetworkResponse>() {
+        VolleyMultipartRequest multipartRequest = new VolleyMultipartRequest(Request.Method.POST, "http://212.237.31.161/api/aspiration", new Response.Listener<NetworkResponse>() {
             @Override
             public void onResponse(NetworkResponse response) {
                 String resultResponse = new String(response.data);

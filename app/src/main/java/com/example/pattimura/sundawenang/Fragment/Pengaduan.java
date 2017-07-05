@@ -146,7 +146,7 @@ public class Pengaduan extends Fragment implements View.OnClickListener {
     }
 
     private void getTotalData() {
-        StringRequest stringRequest = new StringRequest(Request.Method.GET, "http://94.177.203.179/api/report", new Response.Listener<String>() {
+        StringRequest stringRequest = new StringRequest(Request.Method.GET, "http://212.237.31.161/api/report", new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
                 try {
@@ -171,7 +171,7 @@ public class Pengaduan extends Fragment implements View.OnClickListener {
 
     private void kirimData(final String isi, final Uri ktpuri, final Uri pajakuri) {
         //final ProgressDialog dialog = ProgressDialog.show(TambahAspirasi.this.getContext(), "", "Loading. Please wait...", true);
-        VolleyMultipartRequest multipartRequest = new VolleyMultipartRequest(Request.Method.POST, "http://94.177.203.179/api/report", new Response.Listener<NetworkResponse>() {
+        VolleyMultipartRequest multipartRequest = new VolleyMultipartRequest(Request.Method.POST, "http://212.237.31.161/api/report", new Response.Listener<NetworkResponse>() {
             @Override
             public void onResponse(NetworkResponse response) {
                 String resultResponse = new String(response.data);
@@ -196,7 +196,7 @@ public class Pengaduan extends Fragment implements View.OnClickListener {
             @Override
             protected Map<String, String> getParams() {
                 Map<String, String> params = new HashMap<>();
-                params.put("title", "Report " + Integer.toString(total));
+                params.put("title", "Report " + Integer.toString(total + 1));
                 params.put("report", isi);
                 return params;
             }
@@ -248,10 +248,14 @@ public class Pengaduan extends Fragment implements View.OnClickListener {
         switch (requestCode) {
             case Utility.MY_PERMISSIONS_REQUEST_CAMERA:
                 if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    if (userChoosenTask.equals("Ambil Foto"))
-                        launchCamera();
-                    else if (userChoosenTask.equals("Pilih dari Galeri"))
-                        pickdariGalery();
+                    launchCamera();
+                } else {
+                    //code for deny
+                }
+                break;
+            case Utility.MY_PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE:
+                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    pickdariGalery();
                 } else {
                     //code for deny
                 }

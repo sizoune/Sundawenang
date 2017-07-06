@@ -120,7 +120,9 @@ public class Layanan extends Fragment implements View.OnClickListener {
         ktp.setOnClickListener(this);
         pajak.setOnClickListener(this);
         submit.setOnClickListener(this);
-        lainnya.setOnClickListener(this);
+        txtLainnya.setVisibility(View.GONE);
+        lainnya.setVisibility(View.GONE);
+        //lainnya.setOnClickListener(this);
 
         return v;
     }

@@ -111,7 +111,7 @@ public class Layanan extends Fragment implements View.OnClickListener {
         Picasso.with(this.getContext()).load(R.drawable.buttonuploalainnya).fit().into(lainnya);
 
 
-        String[] layanan = {"Pembuatan E-KTP", "Pembuatan Kartu Keluarga", "Layanan Posyandu"};
+        String[] layanan = {"Pembuatan E-KTP", "Pembuatan Kartu Keluarga", "Layanan Posyandu", "AKTE KELAHIRAN", "PBB"};
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(Layanan.this.getContext(), android.R.layout.simple_spinner_item, layanan);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinner = (MaterialSpinner) v.findViewById(R.id.spinner1);

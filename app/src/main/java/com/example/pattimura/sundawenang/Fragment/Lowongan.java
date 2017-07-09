@@ -148,6 +148,7 @@ public class Lowongan extends Fragment {
                     @Override
                     public void onResponse(String response) {
                         try {
+                            daftarlowongan = new ArrayList<>();
                             JSONObject listdata = new JSONObject(response);
                             currentpage = listdata.getInt("current_page");
                             lastpage = listdata.getInt("last_page");
@@ -157,7 +158,7 @@ public class Lowongan extends Fragment {
                                 JSONObject object = isiproduk.getJSONObject(i);
                                 LowonganModel asp = new LowonganModel(object.getString("job_name"), object.getString("created_at"), object.getString("description"), object.getString("job_owner"), object.getString("phone"));
 //                                //Toast.makeText(Lowongan.this.getContext(), asp.getIsi(), Toast.LENGTH_SHORT).show();
-                                asp.addGambar("Lowongan", "http://94.177.203.179/storage/" + object.getString("photo_id"));
+                                asp.addGambar("Lowongan", "http://212.237.31.161/storage/" + object.getString("photo_id"));
                                 daftarlowongan.add(asp);
                             }
 //                            for (int i = 0; i < listdata.length(); i++) {

@@ -184,7 +184,7 @@ public class Aspirasi extends Fragment {
                             for (int i = 0; i < isiaspirasi.length(); i++) {
                                 JSONObject object = isiaspirasi.getJSONObject(i);
                                 if (object.getInt("accept") == 1) {
-                                    AspirasiModel asp = new AspirasiModel(object.getString("aspiration"), object.getString("name"), "http://94.177.203.179/storage/" + object.getString("photo_id"), object.getString("rt"), object.getString("rw"));
+                                    AspirasiModel asp = new AspirasiModel(object.getString("aspiration"), object.getString("name"), "http://212.237.31.161/storage/" + object.getString("photo_id"), object.getString("rt"), object.getString("rw"));
                                     listaspirasi.add(asp);
                                 }
                             }

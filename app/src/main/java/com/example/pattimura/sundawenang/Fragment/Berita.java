@@ -115,6 +115,7 @@ public class Berita extends Fragment {
                     @Override
                     public void onResponse(String response) {
                         try {
+                            daftarberita = new ArrayList<>();
                             JSONArray listdata = new JSONArray(response);
                             for (int i = 0; i < listdata.length(); i++) {
                                 JSONObject data = listdata.getJSONObject(i);

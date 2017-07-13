@@ -71,24 +71,7 @@
                 android:layout_column="3"
                 android:layout_row="0" />
 
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_column="4"
-                android:layout_row="0"
-                android:src="@drawable/category" />
 
-            <TextView
-                android:id="@+id/textViewkategori"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_column="5"
-                android:layout_marginLeft="5dp"
-                android:layout_row="0"
-                android:text="Category"
-                android:textColor="#ffffff"
-                android:textSize="12dp"
-                android:textStyle="bold" />
         </GridLayout>
     </RelativeLayout>
 

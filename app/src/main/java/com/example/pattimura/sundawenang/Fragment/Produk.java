@@ -160,7 +160,7 @@ public class Produk extends Fragment {
                             for (int i = 0; i < isiproduk.length(); i++) {
                                 JSONObject object = isiproduk.getJSONObject(i);
                                 ProdukModel pm = new ProdukModel(object.getString("description"), object.getString("name_product"), object.getString("created_at"), object.getString("phone"));
-                                pm.addGambar("Produk", "http://212.237.31.161/storage/" + object.getString("photo_id"));
+//                                pm.addGambar("Produk", "http://212.237.31.161/storage/" + object.getString("photo_id"));
                                 JSONArray dataGambar = object.getJSONArray("photos");
                                 if (dataGambar != null && dataGambar.length() > 0) {
                                     for (int x = 0; x < dataGambar.length(); x++) {

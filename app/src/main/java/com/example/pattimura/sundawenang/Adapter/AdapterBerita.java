@@ -56,7 +56,7 @@ public class AdapterBerita extends BaseAdapter implements Filterable {
 
         TextView judul = (TextView) v.findViewById(R.id.textViewNamaBerita);
         TextView tanggal = (TextView) v.findViewById(R.id.textViewTanggalberita);
-        TextView kategori = (TextView) v.findViewById(R.id.textViewkategori);
+//        TextView kategori = (TextView) v.findViewById(R.id.textViewkategori);
         ImageView imagedepan = (ImageView) v.findViewById(R.id.imageViewBerita);
 
         Transformation transformation = new RoundedTransformationBuilder()
@@ -72,7 +72,7 @@ public class AdapterBerita extends BaseAdapter implements Filterable {
 
         judul.setText(getItem(position).getJudul());
         tanggal.setText(getItem(position).getTanggal());
-        kategori.setText(getItem(position).getKategori());
+//        kategori.setText(getItem(position).getKategori());
 
         return v;
     }

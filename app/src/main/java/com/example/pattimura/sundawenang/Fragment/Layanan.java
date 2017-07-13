@@ -179,6 +179,7 @@ public class Layanan extends Fragment implements View.OnClickListener {
         });
     }
 
+
     void clearData() {
         spinner.setSelection(0);
         nama.setText("");
